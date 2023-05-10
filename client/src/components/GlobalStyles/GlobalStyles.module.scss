@@ -1,0 +1,102 @@
+@import "normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+    --clr-primary-1: #453227;
+    --clr-primary-2: #5f4435;
+    --clr-primary-3: #795744;
+    --clr-primary-4: #936a53;
+    --clr-primary-5: #ab7a5f;
+    --clr-primary-6: #b99179;
+    --clr-primary-7: #c5a491;
+    --clr-primary-8: #d1b6a8;
+    --clr-primary-9: #decbc0;
+    --clr-primary-10: #eaded7;
+    --clr-grey-1: #102a42;
+    --clr-grey-2: #243a52;
+    --clr-grey-3: #324d67;
+    --clr-grey-4: #48647f;
+    --clr-grey-5: #617d98;
+    --clr-grey-6: #829ab0;
+    --clr-grey-7: #9eb2c7;
+    --clr-grey-8: #bcccdc;
+    --clr-grey-9: #dae2ec;
+    --clr-grey-10: #f1f5f8;
+    --clr-white: #fff;
+    --clr-red-dark: #bb2525;
+    --clr-red-light: #e66b6b;
+    --clr-green-dark: #25bb32;
+    --clr-green-light: #6be675;
+    --clr-yellow-light: #fee904;
+    --clr-yellow-dark: #ddcb00f0;
+    --clr-black: #222;
+    --transition: all 0.3s linear;
+    --spacing: 0.1rem;
+    --radius: 0.5rem;
+    --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    --max-width: 1170px;
+    --fixed-width: 620px;
+    --font-family-1: "IBM Plex Sans Condensed", sans-serif;
+    --font-family-2: "Oxygen", sans-serif;
+    --font-family-3: "Roboto", sans-serif;
+    --font-family-4: "Ubuntu", sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: "Golos Text", sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-image: linear-gradient(-45deg, #923f82, #a12727);
+        border-radius: 50px;
+    }
+}
+
+button,
+input,
+[tabindex] {
+    outline: none;
+    border: none;
+    font-family: "Golos Text", sans-serif;
+}
+
+ul {
+    list-style: none;
+}
+
+a[href] {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+input {
+    background: transparent;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(5px);
+    }
+}

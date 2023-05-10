@@ -1,0 +1,20 @@
+.chart {
+    flex: 5;
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 10px;
+
+    .name {
+        font-size: 25px;
+        font-weight: 600;
+        color: var(--clr-red-dark);
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .grid {
+        color: var(--clr-grey-10);
+    }
+    .chatGrid {
+        stroke: rgb(228, 225, 225);
+    }
+}

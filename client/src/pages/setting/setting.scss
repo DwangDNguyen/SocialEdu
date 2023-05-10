@@ -1,0 +1,77 @@
+.setting {
+    // display: grid;
+    // grid-template-columns: 1fr 6fr;
+    // width: 100%;
+}
+// .container {
+.setting-content {
+    padding-top: 50px;
+    .setting-form {
+        max-width: 600px;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--radius);
+        padding: 50px 50px;
+        min-height: 60vh;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+
+        .setting-form-block {
+            display: flex;
+            flex-direction: column;
+
+            .avt {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                & img {
+                    width: 120px;
+                    height: 120px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+            }
+            .setting-field {
+                margin-bottom: 20px;
+
+                .setting-info {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .change-btn {
+                        border: 1px solid #ccc;
+                        border-radius: var(--radius);
+                        padding: 2px 5px;
+                        text-align: center;
+                        cursor: pointer;
+                    }
+                }
+                .setting-input {
+                    border-bottom: 1px solid #ccc;
+                    min-width: 350px;
+                    padding: 5px 8px;
+                }
+                .error {
+                    color: red;
+                    font-size: 12px;
+                    margin-top: 5px;
+                }
+            }
+            .setting-submit {
+                display: flex;
+                justify-content: center;
+                margin-top: 100px;
+
+                .submit-change {
+                    padding: 10px 20px;
+                    background-color: var(--clr-red-dark);
+                    color: #fff;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+// }

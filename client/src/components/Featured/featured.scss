@@ -1,0 +1,65 @@
+.featured {
+    flex: 2;
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 10px;
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+
+        .name {
+            color: var(--clr-primary-5);
+            font-size: 20px;
+            font-weight: 700;
+        }
+    }
+    .bottom {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+
+        .featuredChart {
+            width: 150px;
+            height: 150px;
+        }
+        .name {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .amount {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--clr-red-dark);
+        }
+        .desc {
+            font-size: 15px;
+            text-align: center;
+            color: var(--clr-grey-7);
+        }
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            width: 100%;
+
+            .item {
+                font-weight: 600;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .changeData {
+                }
+                .positive {
+                    color: green;
+                }
+
+                .negative {
+                    color: red;
+                }
+            }
+        }
+    }
+}

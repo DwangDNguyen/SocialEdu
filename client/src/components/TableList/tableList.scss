@@ -1,0 +1,24 @@
+.table {
+    .table-cell {
+        font-size: 16px !important;
+        font-weight: bold !important;
+    }
+    .cell-wrapper {
+        display: flex;
+        align-items: center;
+
+        .image {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+    }
+
+    .Approved {
+        color: var(--clr-green-dark);
+    }
+    .Pending {
+        color: var(--clr-yellow-dark);
+    }
+}

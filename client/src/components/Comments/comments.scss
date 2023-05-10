@@ -1,0 +1,33 @@
+.comments {
+    display: flex;
+    align-items: center;
+    position: relative;
+    .avt-user {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    }
+    & input {
+        width: 100%;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid rgb(102, 102, 102);
+        background-color: transparent;
+        padding: 5px 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .icon-post-comment {
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+        background-color: transparent;
+    }
+}

@@ -1,0 +1,113 @@
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background-color: var(--clr-white);
+
+    .notifications {
+        position: absolute;
+        background-color: var(--clr-white);
+        z-index: 99;
+        top: 50px;
+        right: 170px;
+        min-width: 400px;
+        .notifications-list {
+            padding: 20px;
+            .notification-item {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                margin-top: 20px;
+                img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px;
+    height: 50px;
+    font-size: 14px;
+    // color: var(--clr-grey-1);
+}
+.search {
+    display: flex;
+    align-items: center;
+
+    .search-input {
+        border: 0.5px solid var(--clr-grey-8);
+        padding: 8px 10px;
+        font-size: 12px;
+        border-top-left-radius: var(--radius);
+        border-bottom-left-radius: var(--radius);
+        border-right: none;
+        background: transparent;
+        min-width: 200px;
+    }
+    .search-input:focus {
+        border-color: var(--clr-red-dark);
+    }
+    .search-button {
+        background-color: var(--clr-red-dark);
+        padding: 8px 10px;
+        color: var(--clr-white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0.5px solid transparent;
+        border-top-right-radius: var(--radius);
+        border-bottom-right-radius: var(--radius);
+        max-height: 32px;
+    }
+}
+.navbar-items {
+    display: flex;
+    align-items: center;
+}
+.navbar-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    transition: var(--transition);
+    position: relative;
+    .icon-upload {
+        font-size: 2.5rem !important;
+    }
+    .amount {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: var(--clr-red-dark);
+        color: var(--clr-white);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        font-weight: 700;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+    }
+    span {
+        margin-left: 5px;
+    }
+    &:hover {
+        color: var(--clr-red-dark);
+    }
+
+    .avatar {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+}

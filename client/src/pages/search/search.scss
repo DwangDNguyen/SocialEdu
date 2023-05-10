@@ -1,0 +1,24 @@
+.search-page {
+    padding: 20px 50px;
+
+    .search-container {
+        padding: 20px 0;
+    }
+    .video-null {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        h3 {
+            margin-top: 20px;
+            font-size: 30px;
+        }
+    }
+}
+.spokes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}

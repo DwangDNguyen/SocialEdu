@@ -1,0 +1,142 @@
+.register {
+    // background: #ce2200;
+    // background: -moz-linear-gradient(
+    //     left,
+    //     #ce2200 0%,
+    //     #9fa45e 100%,
+    //     #c50000 100%
+    // );
+    // background: -webkit-linear-gradient(
+    //     left,
+    //     #ce2200 0%,
+    //     #9fa45e 100%,
+    //     #c50000 100%
+    // );
+    // background: linear-gradient(
+    //     to right,
+    //     #ce2200 0%,
+    //     #9fa45e 100%,
+    //     #c50000 100%
+    // );
+    background: linear-gradient(#30142b, #a12727);
+    min-height: 100vh;
+    padding-top: 50px;
+    .register-container {
+        background: rgba(0, 0, 0, 0.5);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+        max-width: 600px;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--radius);
+        padding: 20px 50px;
+        min-height: 60vh;
+
+        .register-title {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--clr-white) !important;
+            text-align: center;
+        }
+        .form-register {
+            display: flex;
+            gap: 50px;
+            .avt {
+                justify-content: center;
+                align-items: center;
+                & img {
+                    width: 120px;
+                    height: 120px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+
+                & .add-img-image {
+                    margin-bottom: 80px;
+                }
+            }
+            .list-input {
+                width: 100%;
+            }
+            .register-form-input {
+                display: flex;
+                flex-direction: column;
+                margin-top: 10px;
+
+                .register-input {
+                    border: none;
+                    border-bottom: 1px solid #fff;
+                    outline: none;
+                    background: transparent;
+                    padding: 15px 10px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: var(--clr-white) !important;
+                    &:focus::placeholder {
+                        color: transparent;
+                    }
+                }
+                .error {
+                    font-size: 12px;
+                    color: red;
+                }
+
+                &:nth-child(5) {
+                    margin-bottom: 30px;
+                }
+            }
+            .register-button {
+                padding: 10px 20px;
+                text-align: center;
+                border-radius: 1rem;
+                color: #b79726;
+                transition: 0.5s;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                text-transform: uppercase;
+                width: 100%;
+                overflow: hidden;
+                position: relative;
+                background: transparent;
+                letter-spacing: 4px;
+                border: 1px solid #f49803;
+
+                &:hover {
+                    background: #f43703;
+                    color: #fff;
+                    // border-radius: 5px;
+                    box-shadow: 0 0 5px #f44b03, 0 0 5px #bd460b,
+                        0 0 2px #c92100, 0 0 50px #c42603;
+                }
+            }
+        }
+        .transfer-login {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 10px;
+            .transfer-login-text {
+                font-size: 12px;
+                margin-right: 5px;
+                color: var(--clr-white);
+            }
+            .login-link {
+                font-size: 14px;
+                color: var(--clr-red-dark);
+            }
+        }
+        .register-success,
+        .register-failed {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            color: red;
+        }
+        .register-success {
+            color: #00e83e;
+        }
+    }
+}

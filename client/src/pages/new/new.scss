@@ -1,0 +1,99 @@
+.new {
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    width: 100%;
+
+    .new-container {
+        .new-content {
+            padding: 20px;
+            .top {
+                justify-content: start;
+                -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+                box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+                border-radius: var(--radius);
+                padding: 10px 20px;
+                height: auto;
+                .new-title {
+                    color: var(--clr-primary-5);
+                }
+            }
+            .bottom {
+                -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+                box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+                display: flex;
+                margin-top: 20px;
+                .left {
+                    flex: 1;
+                    padding: 50px;
+                    cursor: pointer;
+
+                    .add-img-image {
+                        cursor: pointer;
+
+                        img {
+                            width: 200px;
+                            height: 200px;
+                            object-fit: cover;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+                .right {
+                    flex: 5;
+                    padding: 20px 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    form {
+                        display: flex;
+                        flex-wrap: wrap;
+
+                        width: 100%;
+                        gap: 50px;
+
+                        .column-1,
+                        .column-2 {
+                            width: 45%;
+                        }
+                        .form-input {
+                            display: flex;
+                            flex-direction: column;
+                            margin-top: 10px;
+
+                            input {
+                                border: 1px solid rgb(169, 169, 169);
+                                padding: 10px 15px;
+                                width: 100%;
+
+                                &:focus {
+                                    border: 1px solid var(--clr-red-dark);
+                                }
+                            }
+
+                            .error {
+                                font-size: 12px;
+                                color: red;
+                            }
+                        }
+                    }
+                    .btn-submit {
+                        max-width: 200px;
+                        margin: auto;
+                        padding: 10px 25px;
+                        background-color: var(--clr-red-dark);
+                        color: var(--clr-white);
+                        font-size: 18px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        width: fit-content;
+
+                        &:disabled {
+                            background-color: rgba(133, 2, 2, 0.378);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

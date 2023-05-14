@@ -38,7 +38,7 @@ const Navbar = ({ socket }) => {
     };
     const submitSearch = () => {
         navigate(`/search?q=${encodeURIComponent(search)}`);
-        window.location.reload();
+        // window.location.reload();
     };
     const displayNotifications = ({ senderName, avatarImg, type }) => {
         let action;

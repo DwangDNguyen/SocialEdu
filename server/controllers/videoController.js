@@ -66,6 +66,23 @@ export async function randomVideo(req, res, next) {
         next(err);
     }
 }
+// export async function randomMoreVideo(req, res, next) {
+//     try {
+//         const allVideo = await Video.find();
+//         const allVideosCopy = [...allVideo];
+//         const randomVideos = [];
+//         while (randomVideos.length < 6) {
+//             const randomIndex = Math.floor(
+//                 Math.random() * allVideosCopy.length
+//             );
+//             const randomVideo = allVideosCopy.splice(randomIndex, 1)[0];
+//             randomVideos.push(randomVideo);
+//         }
+//         res.status(200).json(randomVideos);
+//     } catch (err) {
+//         next(err);
+//     }
+// }
 export async function randomRecommendVideo(req, res, next) {
     try {
         const videos = await Video.aggregate([{ $sample: { size: 5 } }]);

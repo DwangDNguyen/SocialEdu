@@ -17,6 +17,7 @@ import { verifyToken } from "../middleware/auth.js";
 router.post("/", verifyToken, addVideo);
 router.get("/randomVideo", randomVideo);
 router.get("/randomRecommendVideo", randomRecommendVideo);
+// router.get("/randomMoreVideos", randomMoreVideo);
 router.delete("/video/:id", verifyToken, deleteVideo);
 // router.get("/:id", getVideo);
 router.put("/view/:id", addView);

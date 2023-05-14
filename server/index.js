@@ -9,6 +9,7 @@ import videoRoutes from "./routes/videosRoute.js";
 import commentRoutes from "./routes/commentRoute.js";
 import conversationRoutes from "./routes/conversationsRoute.js";
 import messageRoutes from "./routes/messagesRoute.js";
+import postRoutes from "./routes/postRoute.js";
 
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -37,6 +38,7 @@ app.use("/api/video", videoRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/conversation", conversationRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/post", postRoutes);
 
 app.listen(process.env.PORT || 5000, () => {
     console.log("connected");

@@ -1,0 +1,39 @@
+.newPost {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 50px;
+    h2 {
+        margin-bottom: 20px;
+    }
+    .newPost-input {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+    .error {
+        color: red;
+        font-size: 12px;
+    }
+    input {
+        border: 1px solid #f5f5f5;
+        padding: 10px;
+        border-radius: 3px;
+        background-color: transparent;
+        // z-index: 999;
+        font-family: "Golos Text", sans-serif;
+        // margin-bottom: 20px;
+    }
+    .ck.ck-editor {
+        max-width: 1213px;
+        // color: #000 !important;
+    }
+    .post-btn {
+        margin-top: 20px;
+        background-color: #f5f5f5;
+        padding: 10px 0;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+    }
+}

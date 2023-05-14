@@ -1,0 +1,47 @@
+.blog {
+    padding: 40px 50px 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 700px;
+    .blog-container {
+        margin-top: 50px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 100px;
+        padding: 0 30px;
+        row-gap: 50px;
+    }
+    .create-blog-btn {
+        position: fixed;
+        right: 30px;
+        bottom: 10px;
+        background-color: var(--clr-red-dark);
+        padding: 10px 10px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease-in-out;
+        animation: grow 1s infinite;
+        cursor: pointer;
+
+        .icon {
+            color: var(--clr-white) !important;
+        }
+    }
+}
+
+@keyframes grow {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

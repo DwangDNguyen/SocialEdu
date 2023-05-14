@@ -117,4 +117,62 @@
             background-color: #373737;
         }
     }
+    .blog {
+        .blog-container {
+            .blog-container-item {
+                background-color: #272727;
+
+                .blog-container-item-content {
+                    & span {
+                        color: #aaaaaa;
+                    }
+                }
+            }
+        }
+    }
+    .post {
+        .separate {
+            background-color: #aaaaaa;
+        }
+    }
+    .newPost {
+        .post-btn {
+            color: #aaaaaa;
+            background-color: #373737;
+        }
+
+        .ck.ck-editor {
+            // color: #000 !important;
+
+            .ck-editor__top {
+                background-color: var(--clr-black);
+            }
+            .ck.ck-button.ck-on,
+            a.ck.ck-button.ck-on {
+                color: var(--ck-color-button-on-color) !important;
+            }
+            .ck.ck-editor__main {
+                color: white;
+            }
+
+            .ck.ck-editor__editable {
+                background-color: var(--clr-black);
+                color: white;
+                // border: none;
+            }
+
+            .ck.ck-editor__editable:focus {
+                outline: none;
+                border-color: var(--clr-white) !important;
+            }
+            .ck-reset_all :not(.ck-reset_all-excluded *),
+            .ck.ck-reset_all {
+                // color: var(--ck-color-text) !important;
+                background-color: var(--clr-black);
+            }
+            .ck-toolbar__separator {
+                background-color: #aaaaaa !important;
+            }
+        }
+    }
 }

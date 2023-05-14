@@ -81,3 +81,19 @@ export const conversation = axios.create({
 export const message = axios.create({
     baseURL: "http://localhost:5000/api/message",
 });
+export const post = axios.create({
+    baseURL: "http://localhost:5000/api/post",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+post.interceptors.request.use(
+    (config) => {
+        const token = Cookies.get("token");
+        config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);

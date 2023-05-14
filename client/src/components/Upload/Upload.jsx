@@ -37,10 +37,10 @@ const Upload = ({ setOpen }) => {
         const base64 = await convert(e.target.files[0]);
         setImgUrl(base64);
     };
-    const onUploadVid = async (e) => {
-        const base64Vid = await convert(e.target.files[0]);
-        setVideoUrl(base64Vid);
-    };
+    // const onUploadVid = async (e) => {
+    //     const base64Vid = await convert(e.target.files[0]);
+    //     setVideoUrl(base64Vid);
+    // };
 
     const handleUpload = async (e) => {
         e.preventDefault();

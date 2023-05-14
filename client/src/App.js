@@ -30,6 +30,9 @@ import PrivateRoute from "./PrivateRoute";
 import { io } from "socket.io-client";
 import Layout from "./components/Layout/Layout";
 import Search from "./pages/search/Search";
+import Blogs from "./pages/blogs/Blogs";
+import Post from "./pages/post/Post";
+import NewPost from "./pages/newPost/NewPost";
 function App() {
     const { darkMode } = useContext(DarkModeContext);
     // const { currentUser } = useContext(AuthContext);
@@ -246,6 +249,36 @@ function App() {
                             <PrivateRoute>
                                 <Layout>
                                     <Search />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/blog"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <Blogs />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/blog/:id"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <Post />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/blog/new"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <NewPost />
                                 </Layout>
                             </PrivateRoute>
                         }

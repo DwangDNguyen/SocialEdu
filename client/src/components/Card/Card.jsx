@@ -9,7 +9,6 @@ import { format } from "timeago.js";
 const Card = ({ video }) => {
     const [channel, setChannel] = useState({});
     const currentUser = useSelector((state) => state.user.user);
-    // console.log(currentUser);
     useEffect(() => {
         const thisChannel = async () => {
             const res = await user.get(`/find/${video.userId}`);
@@ -17,7 +16,7 @@ const Card = ({ video }) => {
         };
         thisChannel();
     }, [video?.userId]);
-    // console.log(channel);
+
     return (
         <>
             <Link to={`/video/${video?._id}`}>

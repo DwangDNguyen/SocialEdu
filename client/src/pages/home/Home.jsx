@@ -15,6 +15,7 @@ import { setSocket } from "../../redux/reducers/socketSlice";
 const Home = () => {
     const [videos, setVideos] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const currentUser = useSelector((state) => state.user.user);
     const dispatch = useDispatch();
     const socket = useRef();
@@ -34,6 +35,32 @@ const Home = () => {
     // useEffect(() => {
     //     socket.current.emit("addUserNotifications", currentUser.username);
     // }, [socket, currentUser]);
+    // useEffect(() => {
+    //     const handleScroll = async () => {
+    //         const { scrollTop, clientHeight, scrollHeight } =
+    //             document.documentElement;
+    //         if (scrollTop + clientHeight >= scrollHeight && !loading) {
+    //             setLoading(true);
+    //             // Simulate loading more videos from an API
+    //             const res = await video.get("/randomMoreVideos");
+
+    //             setTimeout(() => {
+    //                 // Append additional videos to the existing list
+    //                 const additionalVideos = res.data;
+    //                 setVideos((prevVideos) => [
+    //                     ...prevVideos,
+    //                     ...additionalVideos,
+    //                 ]);
+    //                 setLoading(false);
+    //             }, 1000); // Delay for demonstration purposes
+    //         }
+    //     };
+
+    //     window.addEventListener("scroll", handleScroll);
+    //     return () => {
+    //         window.removeEventListener("scroll", handleScroll);
+    //     };
+    // }, [loading]);
     return (
         <div className="home">
             {/* <Sidebar />

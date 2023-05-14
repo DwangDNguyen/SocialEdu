@@ -56,8 +56,8 @@
 }
 .video-list {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 20px;
-    grid-row-gap: 20px;
-    padding: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 100px;
+    grid-row-gap: 30px;
+    padding: 50px 50px;
 }

@@ -11,22 +11,22 @@ const Search = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const q = searchParams.get("q");
-    const [search, setSearch] = useState(q);
-    const [loading, setLoading] = useState(false);
+    // const [search, setSearch] = useState(q);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchVideoSearch = async () => {
-            setLoading(true);
+            // setLoading(true);
             const res = await video.get("/search", {
                 params: {
-                    q: String(search),
+                    q: String(q),
                 },
             });
             setSearchResult(res.data);
             setLoading(false);
         };
         fetchVideoSearch();
-    }, [search]);
+    }, [q]);
     console.log(searchResult);
 
     return (
@@ -37,7 +37,7 @@ const Search = () => {
                 </div>
             ) : (
                 <>
-                    <h1>{`Filter for search "${search}"`}</h1>
+                    <h1>{`Filter for search "${q}"`}</h1>
                     <div
                         className={
                             searchResult.length < 1

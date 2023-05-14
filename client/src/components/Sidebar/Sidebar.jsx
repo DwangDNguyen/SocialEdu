@@ -2,6 +2,7 @@ import React from "react";
 import "./sidebar.scss";
 import { Link, useNavigate } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
+import BookIcon from "@mui/icons-material/Book";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import StorefrontIcon from "@mui/icons-material/Storefront";
@@ -86,10 +87,12 @@ const Sidebar = () => {
                             <span>Calendar</span>
                         </li>
                     </Link>
-                    <li>
-                        <NotificationsIcon className="icon" />
-                        <span>Notifications</span>
-                    </li>
+                    <Link to="/blog">
+                        <li>
+                            <BookIcon className="icon" />
+                            <span>Blog</span>
+                        </li>
+                    </Link>
                     <div className="title service">Service</div>
 
                     <li>

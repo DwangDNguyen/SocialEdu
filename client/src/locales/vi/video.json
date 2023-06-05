@@ -1,0 +1,17 @@
+{
+    "video": {
+        "views": "lượt xem",
+        "view": "lượt xem",
+        "Subscribe": "Đăng ký",
+        "Subscribed": "Đã đăng ký",
+        "Dislike": "Hủy thích",
+        "Share": "Chia sẻ",
+        "Download": "Tải xuống",
+        "Subscribers": "người đã đăng ký",
+        "Top videos most views": "Top video nhiều view nhất"
+    },
+    "comment": {
+        "Comments": "Bình luận",
+        "Add a comment...": "Thêm bình luận..."
+    }
+}

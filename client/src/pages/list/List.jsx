@@ -6,11 +6,7 @@ import DataTable from "../../components/DataTable/DataTable";
 const List = ({ title, namePath }) => {
     return (
         <div className="list">
-            <Sidebar />
-            <div className="list-container">
-                <Navbar />
-                <DataTable title={title} namePath={namePath} />
-            </div>
+            <DataTable title={title} namePath={namePath} />
         </div>
     );
 };

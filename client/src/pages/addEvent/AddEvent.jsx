@@ -13,6 +13,7 @@ import { set } from "date-fns";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { useTranslation } from "react-i18next";
 
 //schema to validate event inputs
 const schema = yup
@@ -27,7 +28,7 @@ const AddEvent = ({ addEventApi, error }) => {
     const [dbError, setError] = useState(false);
     const [firstRender, setFirstRender] = useState(true);
     const currentUser = useSelector((state) => state.user.user);
-
+    const { t } = useTranslation("calendar");
     useEffect(() => {
         if (error && !firstRender) {
             setError(error);
@@ -61,7 +62,9 @@ const AddEvent = ({ addEventApi, error }) => {
                 <Navbar />
                 <div className="add-event-content"> */}
             <div className="top">
-                <h1 className="add-event-title">Add Event</h1>
+                <h1 className="add-event-title">
+                    {t("create event.Add Event")}
+                </h1>
             </div>
             <div className="bottom">
                 <form
@@ -70,12 +73,12 @@ const AddEvent = ({ addEventApi, error }) => {
                 >
                     <div className="input-info">
                         <label htmlFor="title" className="form-label">
-                            Event Title
+                            {t("create event.Event Title")}
                         </label>
                         <input
                             {...register("title")}
                             type="text"
-                            placeholder="Title"
+                            placeholder={t("create event.Title")}
                             className="form-controll"
                             id="title"
                             aria-describedby="title"
@@ -95,7 +98,7 @@ const AddEvent = ({ addEventApi, error }) => {
                     </div>
                     <div className="input-info" style={{ zIndex: "100" }}>
                         <label htmlFor="start" className="form-label">
-                            Start Date
+                            {t("create event.Start Date")}
                         </label>
                         {/* controllers are the way you can wrap and use datePicker inside react form-hook*/}
                         {/* start date controller*/}
@@ -104,7 +107,9 @@ const AddEvent = ({ addEventApi, error }) => {
                             name="start"
                             render={({ field }) => (
                                 <DatePicker
-                                    placeholderText="Select date"
+                                    placeholderText={t(
+                                        "create event.Select Date"
+                                    )}
                                     onChange={(date) => field.onChange(date)}
                                     selected={field.value}
                                     value={field.value}
@@ -145,7 +150,7 @@ const AddEvent = ({ addEventApi, error }) => {
                     </div>
                     <div className="input-info" style={{ zIndex: "100" }}>
                         <label htmlFor="end" className="form-label">
-                            End Date
+                            {t("create event.End Date")}
                         </label>
                         {/* end date controller*/}
                         <Controller
@@ -154,7 +159,9 @@ const AddEvent = ({ addEventApi, error }) => {
                             autocomplete="off"
                             render={({ field }) => (
                                 <DatePicker
-                                    placeholderText="Select end date"
+                                    placeholderText={t(
+                                        "create event.Select End Date"
+                                    )}
                                     onChange={(date) => field.onChange(date)}
                                     selected={field.value}
                                     value={field.value}
@@ -182,20 +189,22 @@ const AddEvent = ({ addEventApi, error }) => {
                     </div>
                     <div className="input-info">
                         <label htmlFor="describe" className="form-label">
-                            Event Description{" "}
-                            <span className="option">(optional)</span>
+                            {t("create event.Event Description")}{" "}
+                            <span className="option">
+                                ({t("create event.Optional")})
+                            </span>
                         </label>
                         <input
                             {...register("describe")}
                             type="text"
-                            placeholder="Describe your event"
+                            placeholder={t("create event.Describe your event")}
                             className="form-controll"
                             id="describe"
                             aria-describedby="describe"
                         />
                     </div>
                     <button type="submit" className="btn-create">
-                        Create
+                        {t("create event.Create")}
                     </button>
                 </form>
             </div>

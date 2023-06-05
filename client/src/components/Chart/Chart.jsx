@@ -2,103 +2,71 @@ import React from "react";
 import "./chart.scss";
 import { PureComponent } from "react";
 import {
-    AreaChart,
-    Area,
-    XAxis,
-    YAxis,
-    CartesianGrid,
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
     Tooltip,
-    ResponsiveContainer,
-} from "recharts";
-const data = [
-    {
-        name: "Jan",
-        total: 1200,
-    },
-    {
-        name: "Feb",
-        total: 2400,
-    },
-    {
-        name: "Mar",
-        total: 600,
-    },
-    {
-        name: "Arp",
-        total: 1000,
-    },
-    {
-        name: "May",
-        total: 2000,
-    },
-    {
-        name: "Jun",
-        total: 7200,
-    },
-    {
-        name: "Jul",
-        total: 6000,
-    },
-    {
-        name: "Aug",
-        total: 3000,
-    },
-    {
-        name: "Sep",
-        total: 4500,
-    },
-    {
-        name: "Oct",
-        total: 5200,
-    },
-    {
-        name: "Nov",
-        total: 2600,
-    },
-    {
-        name: "Dec",
-        total: 1800,
-    },
-];
-const Charts = ({ title, aspect }) => {
+    Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import "chartjs-plugin-datalabels";
+import ReactLoading from "react-loading";
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
+const Charts = ({ title, videoUser, isLoading }) => {
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: "top",
+            },
+        },
+    };
+    const labels = videoUser
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .slice(0, 5)
+        .map((video) => {
+            if (video["title"].length > 20) {
+                return video.title.substr(0, 20) + "...";
+            } else {
+                return video.title;
+            }
+        });
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: "Views",
+                data: videoUser.map((video) => video.views),
+                backgroundColor: "rgba(255, 99, 132, 0.5)",
+            },
+            {
+                label: "Likes",
+                data: videoUser.map((video) => video["likes"].length),
+                backgroundColor: "rgba(53, 162, 235, 0.5)",
+            },
+        ],
+    };
     return (
         <div className="chart">
-            <div className="name">{title}</div>
-            <ResponsiveContainer width="100%" aspect={aspect}>
-                <AreaChart
-                    className="chartGrid"
-                    width={730}
-                    height={250}
-                    data={data}
-                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                >
-                    <defs>
-                        <linearGradient id="total" x1="0" y1="0" x2="0" y2="1">
-                            <stop
-                                offset="5%"
-                                stopColor="#bb2525"
-                                stopOpacity={0.8}
-                            />
-                            <stop
-                                offset="95%"
-                                stopColor="#bb2525"
-                                stopOpacity={0}
-                            />
-                        </linearGradient>
-                    </defs>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <CartesianGrid strokeDasharray="3 3" className="grid" />
-                    <Tooltip />
-                    <Area
-                        type="monotone"
-                        dataKey="total"
-                        stroke="#bb2525"
-                        fillOpacity={1}
-                        fill="url(#total)"
-                    />
-                </AreaChart>
-            </ResponsiveContainer>
+            {isLoading ? (
+                <div className="loading">
+                    <ReactLoading type="spokes" color="#a12727" />
+                </div>
+            ) : (
+                <>
+                    <div className="name">{title}</div>
+                    <Bar options={options} data={data} className="chart-bar" />
+                </>
+            )}
         </div>
     );
 };

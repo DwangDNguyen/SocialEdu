@@ -9,80 +9,122 @@ import { useParams, Link } from "react-router-dom";
 // import {  rows } from "../../components/DataTable/DataTable";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-
+import { user, video } from "../../redux/axios/axios";
+import ReactLoading from "react-loading";
 const SinglePage = () => {
     const { userId } = useParams();
-    const [user, setUser] = useState([]);
+    const [thisUser, setThisUser] = useState([]);
+    const [videoUser, setVideoUser] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const docRef = doc(db, "users", userId);
+    //         const docSnap = await getDoc(docRef);
+
+    //         if (docSnap.exists()) {
+    //             setUser(docSnap.data());
+    //         } else {
+    //             console.log("Error");
+    //         }
+    //     };
+    //     fetchData();
+    // }, [userId]);
     useEffect(() => {
         const fetchData = async () => {
-            const docRef = doc(db, "users", userId);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                setUser(docSnap.data());
-            } else {
-                console.log("Error");
-            }
+            setIsLoading(true);
+            const res = await user.get("/find/" + userId);
+            const resVids = await video.get("/findUser/" + userId);
+            setVideoUser(resVids.data);
+            setThisUser(res.data);
+            setIsLoading(false);
         };
         fetchData();
     }, [userId]);
 
     return (
         <div className="singlePage">
-            <Sidebar />
-            <div className="singlePage-container">
-                <Navbar />
-                <div className="singlePage-content">
-                    <div className="singlePage-content-top">
-                        <div className="left">
-                            <div className="single-avatar">
-                                <img src={user.img} />
+            <div className="singlePage-content">
+                <div className="singlePage-content-top">
+                    <div className="left">
+                        {isLoading ? (
+                            <div className="loading">
+                                <ReactLoading type="spokes" color="#a12727" />
                             </div>
-                            <div className="single-info">
-                                <h1>{user.Username}</h1>
-                                <div className="info-item">
-                                    <span className="info-title">Email:</span>
-                                    <span className="info-content">
-                                        {user.Email}
-                                    </span>
+                        ) : (
+                            <>
+                                <div className="single-avatar">
+                                    <img
+                                        src={
+                                            thisUser.avatar ||
+                                            "https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
+                                        }
+                                    />
                                 </div>
-                                <div className="info-item">
-                                    <span className="info-title">Phone:</span>
-                                    <span className="info-content">
-                                        {user.Phone}
-                                    </span>
-                                </div>
-                                <div className="info-item">
-                                    <span className="info-title">Address:</span>
-                                    <span className="info-content">
-                                        {user.Address}
-                                    </span>
-                                </div>
-                                {/* <div className="info-item">
+                                <div className="single-info">
+                                    <h1>{thisUser.username}</h1>
+                                    <div className="info-item">
+                                        <span className="info-title">
+                                            Email:
+                                        </span>
+                                        <span className="info-content">
+                                            {thisUser.email}
+                                        </span>
+                                    </div>
+                                    <div className="info-item">
+                                        <span className="info-title">
+                                            Phone:
+                                        </span>
+                                        <span className="info-content">
+                                            {thisUser.phone}
+                                        </span>
+                                    </div>
+                                    <div className="info-item">
+                                        <span className="info-title">
+                                            Subscribers:
+                                        </span>
+                                        <span className="info-content">
+                                            {thisUser.subscribers}
+                                        </span>
+                                    </div>
+                                    {/* <div className="info-item">
                                     <span className="info-title">Country:</span>
                                     <span className="info-content">
                                         {thisUser.country}
                                     </span>
                                 </div> */}
-                            </div>
-                            <Link
-                                to={`/update/${userId}`}
-                                style={{ textDecoration: "none" }}
-                            >
-                                <div className="edit-btn">Edit</div>
-                            </Link>
-                        </div>
-                        <div className="right">
-                            <Chart
-                                title="User Spending (Last Year)"
-                                aspect={4 / 1}
-                            />
-                        </div>
+                                </div>
+                            </>
+                        )}
+
+                        {/* <Link
+                            to={`/update/${userId}`}
+                            style={{ textDecoration: "none" }}
+                        >
+                            <div className="edit-btn">Edit</div>
+                        </Link> */}
                     </div>
-                    <div className="singlePage-content-bottom">
-                        <h1 className="title-table">Latest Transactions</h1>
-                        <TableList />
-                    </div>
+                    {/* <div className="right"> */}
+
+                    <Chart
+                        title="Views and Likes oldest videos"
+                        videoUser={videoUser}
+                        isLoading={isLoading}
+                    />
+
+                    {/* </div> */}
+                </div>
+                <div className="singlePage-content-bottom">
+                    {isLoading ? (
+                        <div className="loading">
+                            <ReactLoading type="spokes" color="#a12727" />
+                        </div>
+                    ) : (
+                        <>
+                            <h1 className="title-table">Latest Videos</h1>
+                            <TableList userId={userId} videoUser={videoUser} />
+                        </>
+                    )}
                 </div>
             </div>
         </div>

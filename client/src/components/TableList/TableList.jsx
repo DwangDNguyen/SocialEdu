@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./tableList.scss";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -8,6 +8,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { video } from "../../redux/axios/axios";
+import { format } from "timeago.js";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -29,7 +31,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const TableList = () => {
+const TableList = ({ userId, videoUser }) => {
     const rows = [
         {
             id: 1143155,
@@ -88,65 +90,62 @@ const TableList = () => {
                 <TableHead>
                     <TableRow>
                         <StyledTableCell className="table-cell">
-                            Tracking ID
+                            Video
                         </StyledTableCell>
                         <StyledTableCell className="table-cell">
-                            Product
+                            Title
                         </StyledTableCell>
                         <StyledTableCell className="table-cell">
-                            Customer
+                            Views
                         </StyledTableCell>
                         <StyledTableCell className="table-cell">
-                            Date
+                            Likes
                         </StyledTableCell>
                         <StyledTableCell className="table-cell">
-                            Amount
+                            Created At
                         </StyledTableCell>
-                        <StyledTableCell className="table-cell">
+                        {/* <StyledTableCell className="table-cell">
                             Payment Method
                         </StyledTableCell>
                         <StyledTableCell className="table-cell">
                             Status
-                        </StyledTableCell>
+                        </StyledTableCell> */}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <StyledTableRow key={row.id}>
+                    {videoUser.map((row) => (
+                        <StyledTableRow key={row._id}>
                             <StyledTableCell
                                 className="table-cell-item"
                                 component="th"
                                 scope="row"
                             >
-                                {row.id}
+                                <img
+                                    src={row.ImgUrl}
+                                    alt=""
+                                    className="image"
+                                />
                             </StyledTableCell>
                             <StyledTableCell className="table-cell-item">
-                                <div className="cell-wrapper">
-                                    <img
-                                        src={row.img}
-                                        alt=""
-                                        className="image"
-                                    />
-                                    {row.product}
-                                </div>
+                                {row.title}
                             </StyledTableCell>
                             <StyledTableCell className="table-cell-item">
-                                {row.customer}
+                                {row.views}
                             </StyledTableCell>
                             <StyledTableCell className="table-cell-item">
-                                {row.date}
+                                {row["likes"].length}
                             </StyledTableCell>
                             <StyledTableCell className="table-cell-item">
-                                {row.amount}
+                                {format(row.createdAt)}
                             </StyledTableCell>
-                            <StyledTableCell className="table-cell-item">
+                            {/* <StyledTableCell className="table-cell-item">
                                 {row.method}
                             </StyledTableCell>
                             <StyledTableCell className="table-cell-item">
                                 <span className={`status ${row.status}`}>
                                     {row.status}
                                 </span>
-                            </StyledTableCell>
+                            </StyledTableCell> */}
                         </StyledTableRow>
                     ))}
                 </TableBody>

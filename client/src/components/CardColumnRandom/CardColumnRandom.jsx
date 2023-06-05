@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { user } from "../../redux/axios/axios";
 import { format } from "timeago.js";
+import { useTranslation } from "react-i18next";
 const CardColumnRandom = ({ video }) => {
     const [channel, setChannel] = useState({});
+    const { t } = useTranslation("video");
     // console.log(video);
     useEffect(() => {
         const thisChannel = async () => {
@@ -31,7 +33,7 @@ const CardColumnRandom = ({ video }) => {
                                 </span>
                                 <div className="col-video-interact">
                                     <span className="col-video-view">
-                                        {video.views} views
+                                        {video.views} {t("video.views")}
                                     </span>
                                     <FiberManualRecordIcon className="col-icon-dot" />
                                     <span className="col-video-time-upload">

@@ -132,19 +132,23 @@ export async function login(req, res, next) {
             req.body.password,
             user.password
         );
-        if (!validPassword) next({ error: "Password does not match." });
+        if (validPassword === false) {
+            return next({ error: "Password does not match." });
+        }
 
         // const accessToken = generateAccessToken(user);
         // const refreshToken = generateRefreshToken(user);
         // refreshTokens.push(refreshToken);
         const token = jwt.sign(
-            { userId: user._id, email: user.email },
+            { userId: user._id, email: user.email, isAdmin: user.isAdmin },
             process.env.JWT_SECRET,
             {
                 expiresIn: "1d",
             }
         );
-        console.log(token);
+        console.log(req.body.password);
+        console.log(user.password);
+        console.log(validPassword);
         user.token = token;
         const { password, ...userInfo } = Object.assign({}, user.toJSON());
         req.user = { userId: user._id, ...userInfo };

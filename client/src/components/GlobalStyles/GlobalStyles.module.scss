@@ -1,6 +1,6 @@
 @import "normalize.css";
 @import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&display=swap");
-
+@import "../../style/_mixins.scss";
 :root {
     --clr-primary-1: #453227;
     --clr-primary-2: #5f4435;

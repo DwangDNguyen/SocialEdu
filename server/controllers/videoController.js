@@ -31,7 +31,7 @@ export async function updateVideo(req, res, next) {
     try {
         const video = await Video.findById(req.params.id);
         if (!video) return res.status(404).json("Video not found");
-        if (req.user.id === video.userId) {
+        if (req.user.userId === video.userId || req.user.isAdmin) {
             const updatedVideo = await Video.findByIdAndUpdate(
                 req.params.id,
                 { $set: req.body },
@@ -47,7 +47,7 @@ export async function deleteVideo(req, res, next) {
     try {
         const video = await Video.findById(req.params.id);
         if (!video) return res.status(404).json("Video not found");
-        if (req.user.userId === video.userId) {
+        if (req.user.userId === video.userId || req.user.isAdmin) {
             await Video.findByIdAndDelete(req.params.id);
             res.status(200).json("Video deleted");
         } else {
@@ -138,6 +138,43 @@ export async function getByTagAndUser(req, res, next) {
             ],
         }).limit(20);
         res.status(200).json(videos);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function getAllVideos(req, res, next) {
+    try {
+        const videos = await Video.find();
+        res.status(200).json(videos);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function getVideosMostViewed(req, res, next) {
+    try {
+        const videos = await Video.find().sort({ views: -1 }).limit(5);
+        res.status(200).json(videos);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function getVideosNewest(req, res, next) {
+    try {
+        const videos = await Video.find().sort({ createdAt: -1 }).limit(5);
+        res.status(200).json(videos);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function downloadVideo(req, res, next) {
+    try {
+        const video = await Video.findById(req.params.id);
+        const path = `${process.cwd()}/uploads/${video.fileName}`;
+        res.download(path);
     } catch (err) {
         next(err);
     }

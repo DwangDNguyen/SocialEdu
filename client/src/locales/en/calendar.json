@@ -1,0 +1,28 @@
+{
+    "create event": {
+        "Add Event": "Add Event",
+        "Event Title": "Event Title",
+        "Start Date": "Start Date",
+        "End Date": "End Date",
+        "Event Description": "Event Description",
+        "Optional": "Optional",
+        "Title": "Title",
+        "Select Date": "Select Date",
+        "Select End Date": "Select End Date",
+        "Describe your event": "Describe Your Event",
+        "Create": "Create",
+        "New": "New",
+        "Calendar": "Calendar"
+    },
+    "popping": {
+        "From": "From",
+        "To": "To",
+        "Cancel": "Cancel",
+        "Delete": "Delete",
+        "Update": "Update"
+    },
+    "update event": {
+        "Update Event": "Update Event",
+        "Update": "Update"
+    }
+}

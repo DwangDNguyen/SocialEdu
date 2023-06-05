@@ -9,19 +9,25 @@ import ListVideos from "../../components/ListVideos/ListVideos";
 import CardColumn from "../../components/CardProfile/CardProfile";
 import Card from "../../components/Card/Card";
 import { useLocation } from "react-router-dom";
-import { user, video, conversation } from "../../redux/axios/axios";
+import { user, video, conversation, post } from "../../redux/axios/axios";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import { format } from "timeago.js";
 import ReactLoading from "react-loading";
 import { refreshChat } from "../../redux/reducers/userSlice";
+import { useTranslation } from "react-i18next";
+import { subscription } from "../../redux/reducers/userSlice";
+import CardProfile from "../../components/CardProfile/CardProfile";
+import { toast, ToastContainer } from "react-toastify";
 
 const Channel = () => {
+    const { t } = useTranslation(["setting", "video"]);
     const idChannel = useLocation().pathname.split("/")[2];
     const [channel, setChannel] = useState({});
     const [listVid, setListVid] = useState([]);
+    const [listBlog, setListBlog] = useState([]);
     const [listVidPlaylist, setListVidPlaylist] = useState([]);
-    const tabs = ["Video", "Playlist"];
+    const tabs = ["Video", t("profile.Playlist"), "Blog"];
     const [tabSelected, setTabSelected] = useState(0);
     const [isPlaylist, setIsPlayList] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -42,9 +48,11 @@ const Channel = () => {
             setIsLoading(true);
             const res = await user.get("/find/" + idChannel);
             const resListVid = await video.get("/findUser/" + idChannel);
+            const resBlog = await post.get("/listPost/" + idChannel);
             // console.log(resListVid);
             setListVid(resListVid.data);
             setChannel(res.data);
+            setListBlog(resBlog.data);
             setIsLoading(false);
         };
         fetchData();
@@ -107,7 +115,22 @@ const Channel = () => {
             dispatch(refreshChat());
         }
     };
+    const handleSub = async () => {
+        if (currentUser.subscribedUsers.includes(channel._id)) {
+            await user.put(`/unsub/${channel._id}`);
+            toast.success("Unsubscribed successfully");
+        } else {
+            await user.put(`/sub/${channel._id}`);
+            toast.success("Subscribed successfully");
+            // await notification.post("/", {
+            //     senderId: currentUser._id,
+            //     receiverId: channel._id,
+            //     content: `${currentUser.username} subscribed to your channel`,
+            // });
+        }
 
+        dispatch(subscription(channel._id));
+    };
     return (
         <div className="channel">
             {/* <Sidebar />
@@ -119,6 +142,7 @@ const Channel = () => {
                 </div>
             ) : (
                 <div className="channel-content">
+                    <ToastContainer theme="dark" position="top-center" />
                     <div className="channel-content-top">
                         <div className="channel-user">
                             <div className="single-avatar">
@@ -143,6 +167,14 @@ const Channel = () => {
                                         {channel.phone}
                                     </span>
                                 </div>
+                                <div className="info-item">
+                                    <span className="info-title">
+                                        {t("profile.Subscribers")}:
+                                    </span>
+                                    <span className="info-content">
+                                        {channel.subscribers}
+                                    </span>
+                                </div>
                                 {/* <div className="info-item">
                                         <span className="info-title">Address:</span>
                                         <span className="info-content">
@@ -158,7 +190,7 @@ const Channel = () => {
                             </div>
                         </div>
                         <div className="info-option">
-                            <Link to={`/chat/${channel._id}`}>
+                            <Link to={`/chat`}>
                                 <button
                                     className="chat-btn"
                                     onClick={handleConversation}
@@ -166,13 +198,17 @@ const Channel = () => {
                                     Message
                                 </button>
                             </Link>
+                            <button
+                                className="subscribe-btn"
+                                onClick={handleSub}
+                            >
+                                {currentUser.subscribedUsers?.includes(
+                                    channel._id
+                                )
+                                    ? "Subscribed"
+                                    : "Subscribe"}
+                            </button>
                         </div>
-                        {/* <Link
-                            to={`/update/${currentUser._id}`}
-                            style={{ textDecoration: "none" }}
-                        >
-                            <div className="edit-btn">Edit</div>
-                        </Link> */}
                     </div>
                     <div className="channel-content-bottom">
                         <div className="left">
@@ -311,6 +347,38 @@ const Channel = () => {
                                                             </span>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                            {tabSelected === 2 && (
+                                <div className="list-blog-profile">
+                                    {listBlog?.map((blog) => (
+                                        <Link to={`/blog/${blog._id}`}>
+                                            <div className="blog-container-item">
+                                                <div className="blog-container-item-img">
+                                                    <img src={blog.image} />
+                                                </div>
+                                                <div className="blog-container-item-top">
+                                                    <div className="blog-container-item-date">
+                                                        <span>
+                                                            {format(
+                                                                blog.createdAt
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="blog-container-item-content">
+                                                    <h2>{blog.title}</h2>
+                                                    <div
+                                                        className="blog-container-item-content-text"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: blog.content,
+                                                        }}
+                                                    ></div>
                                                 </div>
                                             </div>
                                         </Link>

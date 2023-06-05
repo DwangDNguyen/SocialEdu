@@ -1,19 +1,32 @@
 .search-page {
     padding: 20px 50px;
-
+    min-height: 93vh;
     .search-container {
         padding: 20px 0;
+        .no-result {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+            h3 {
+                margin-top: 20px;
+                font-size: 30px;
+            }
+            .not-found-text {
+                text-align: center;
+            }
+        }
+        .search-category {
+            margin-bottom: 20px;
+        }
     }
     .video-null {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        gap: 10px;
-        h3 {
-            margin-top: 20px;
-            font-size: 30px;
-        }
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
+        // flex-direction: column;
+        // gap: 10px;
     }
 }
 .spokes {

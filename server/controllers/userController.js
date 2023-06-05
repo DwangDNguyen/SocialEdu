@@ -137,3 +137,43 @@ export const dislike = async (req, res, next) => {
         next(err);
     }
 };
+export const getAllUser = async (req, res, next) => {
+    try {
+        // const users = await User.find({ isAdmin: { $ne: true } });
+        const users = await User.find({});
+        res.status(200).json(users);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getUserMostSubscribed = async (req, res, next) => {
+    try {
+        const users = await User.find({ isAdmin: { $ne: true } })
+            .sort({ subscribers: -1 })
+            .limit(5);
+        res.status(200).json(users);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getNewUsers = async (req, res, next) => {
+    try {
+        const users = await User.find({ isAdmin: { $ne: true } })
+            .sort({ createdAt: -1, isAdmin: false })
+            .limit(5);
+        res.status(200).json(users);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const deleteUser = async (req, res, next) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.status(200).json("User has been deleted");
+    } catch (err) {
+        next(err);
+    }
+};

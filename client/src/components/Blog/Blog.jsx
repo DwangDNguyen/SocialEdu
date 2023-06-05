@@ -3,7 +3,7 @@ import "./blog.scss";
 import { user } from "../../redux/axios/axios";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Blog = ({ blog }) => {
     const [channel, setChannel] = useState({});
@@ -31,6 +31,7 @@ const Blog = ({ blog }) => {
                         <span>{format(blog.createdAt)}</span>
                     </div>
                 </div>
+
                 <div className="blog-container-item-content">
                     <h2>{blog.title}</h2>
                     <div

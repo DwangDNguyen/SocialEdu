@@ -42,3 +42,13 @@ export const verifyToken = (req, res, next) => {
         return res.status(500).send({ message: err.message });
     }
 };
+
+export const isAdmin = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.user.isAdmin) {
+            next();
+        } else {
+            res.status(403).json("You are not an admin!");
+        }
+    });
+};

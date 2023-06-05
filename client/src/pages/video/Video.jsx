@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable jsx-a11y/iframe-has-title */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect, useRef } from "react";
@@ -12,11 +13,19 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ReplyIcon from "@mui/icons-material/Reply";
 import DownloadIcon from "@mui/icons-material/Download";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import {
+    FacebookIcon,
+    TwitterIcon,
+    FacebookMessengerIcon,
+    FacebookShareButton,
+    TwitterShareButton,
+    FacebookMessengerShareButton,
+} from "react-share";
 import Comments from "../../components/Comments/Comments";
 import Comment from "../../components/Comment/Comment";
 import RecommendVid from "../../components/RecommendVid/RecommendVid";
-import { comment, user, video } from "../../redux/axios/axios";
-import { useLocation } from "react-router-dom";
+import { comment, notification, user, video } from "../../redux/axios/axios";
+import { Link, useLocation } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSuccess, like, dislike } from "../../redux/reducers/videoSlice";
@@ -24,13 +33,15 @@ import { format } from "timeago.js";
 import { io } from "socket.io-client";
 import axios from "axios";
 import { subscription } from "../../redux/reducers/userSlice";
+import { useTranslation } from "react-i18next";
 
 const Video = () => {
+    const { t } = useTranslation("video");
     const [channel, setChannel] = useState({});
     const [currentVid, setCurrentVid] = useState({});
     const [listComment, setListComment] = useState([]);
     const [notifications, setNotifications] = useState([]);
-
+    const [isOpen, setIsOpen] = useState(false);
     const videoPlayerRef = useRef(null);
     const [videoState, setVideoState] = useState({});
     const [isPlaying, setIsPlaying] = useState(true);
@@ -82,13 +93,21 @@ const Video = () => {
     }, [isReady]);
     // useEffect(() => {
     //     socket.current = io("ws://localhost:8901");
-    // }, []);
+    // }, [socket]);
     // useEffect(() => {
     //     socket.current.emit("addUserNotifications", currentUser.username);
     // }, [socket, currentUser]);
     const handleLike = async (type) => {
         await user.put("/like/" + currentVid._id);
-        dispatch(like(currentUser._id));
+        if (currentUser._id !== channel._id) {
+            await notification.post("/", {
+                senderId: currentUser._id,
+                receiverId: channel._id,
+                content: `${currentUser.username} liked your video`,
+            });
+            dispatch(like(currentUser._id));
+        }
+
         socket.current.emit("sendNotification", {
             senderName: currentUser.username,
             avatarImg: currentUser.avatar,
@@ -99,7 +118,14 @@ const Video = () => {
 
     const handleDislike = async (type) => {
         await user.put("/dislike/" + currentVid._id);
-        dispatch(dislike(currentUser._id));
+        if (currentUser._id !== channel._id) {
+            await notification.post("/", {
+                senderId: currentUser._id,
+                receiverId: channel._id,
+                content: `${currentUser.username} disliked your video`,
+            });
+            dispatch(dislike(currentUser._id));
+        }
         socket.current.emit("sendNotification", {
             senderName: currentUser.username,
             avatarImg: currentUser.avatar,
@@ -109,12 +135,20 @@ const Video = () => {
     };
 
     const handleSub = async () => {
-        currentUser.subscribedUsers.includes(channel._id)
-            ? await user.put(`/unsub/${channel._id}`)
-            : await user.put(`/sub/${channel._id}`);
+        if (currentUser.subscribedUsers.includes(channel._id)) {
+            await user.put(`/unsub/${channel._id}`);
+        } else {
+            await user.put(`/sub/${channel._id}`);
+            await notification.post("/", {
+                senderId: currentUser._id,
+                receiverId: channel._id,
+                content: `${currentUser.username} subscribed to your channel`,
+            });
+        }
 
         dispatch(subscription(channel._id));
     };
+    const handleDownload = async () => {};
     return (
         <div className="video">
             {/* <Sidebar />
@@ -143,29 +177,44 @@ const Video = () => {
                         <h1 className="title-vid">{currentVid.title}</h1>
                         <div className="detail-vid-wrapper">
                             <div className="vid-author">
-                                <div className="avt-author">
-                                    <img src={channel.avatar} />
-                                </div>
+                                {channel._id === currentUser._id ? (
+                                    <Link to={`/profile/${channel._id}`}>
+                                        <div className="avt-author">
+                                            <img src={channel.avatar} />
+                                        </div>
+                                    </Link>
+                                ) : (
+                                    <Link to={`/channel/${channel._id}`}>
+                                        <div className="avt-author">
+                                            <img src={channel.avatar} />
+                                        </div>
+                                    </Link>
+                                )}
+
                                 <div className="author-info">
                                     <h3 className="author-name">
                                         {channel.username}
                                     </h3>
                                     <span className="author-subscribed">
-                                        {channel.subscribers} subscribers
+                                        {channel.subscribers}{" "}
+                                        {t("video.Subscribers")}
                                     </span>
                                 </div>
                             </div>
                             <div className="vid-controll">
-                                <button
-                                    className="subscribe-btn"
-                                    onClick={handleSub}
-                                >
-                                    {currentUser.subscribedUsers?.includes(
-                                        channel._id
-                                    )
-                                        ? "Subscribed"
-                                        : "Subscribe"}
-                                </button>
+                                {currentUser._id !== currentVid.userId ? (
+                                    <button
+                                        className="subscribe-btn"
+                                        onClick={handleSub}
+                                    >
+                                        {currentUser.subscribedUsers?.includes(
+                                            channel._id
+                                        )
+                                            ? t("video.Subscribed")
+                                            : t("video.Subscribe")}
+                                    </button>
+                                ) : null}
+
                                 <div
                                     className="btn-vid-control like-btn"
                                     onClick={() => handleLike(1)}
@@ -192,15 +241,37 @@ const Video = () => {
                                     ) : (
                                         <ThumbDownOffAltIcon />
                                     )}{" "}
-                                    Dislike
+                                    {t("video.Dislike")}
                                 </div>
-                                <div className="btn-vid-control share-btn">
+                                <div
+                                    className="btn-vid-control share-btn"
+                                    onClick={() => setIsOpen(!isOpen)}
+                                >
                                     <ReplyIcon />
-                                    Share
+                                    {t("video.Share")}
+                                    {isOpen && (
+                                        <div className="share-option">
+                                            <FacebookShareButton
+                                                url={currentVideo.videoUrl}
+                                            >
+                                                <FacebookIcon className="icon-share" />
+                                            </FacebookShareButton>
+                                            <TwitterShareButton
+                                                url={currentVideo.videoUrl}
+                                            >
+                                                <TwitterIcon className="icon-share" />
+                                            </TwitterShareButton>
+                                            <FacebookMessengerShareButton
+                                                url={currentVideo.videoUrl}
+                                            >
+                                                <FacebookMessengerIcon className="icon-share" />
+                                            </FacebookMessengerShareButton>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="btn-vid-control download-btn">
                                     <DownloadIcon />
-                                    Download
+                                    {t("video.Download")}
                                 </div>
                             </div>
                         </div>
@@ -208,8 +279,12 @@ const Video = () => {
                             <div className="vid-interact">
                                 <span className="video-view">
                                     {currentVid.views > 1
-                                        ? currentVid.views + " views"
-                                        : currentVid.views + " view"}
+                                        ? currentVid.views +
+                                          " " +
+                                          t("video.views")
+                                        : currentVid.views +
+                                          " " +
+                                          t("video.view")}
                                 </span>
                                 <FiberManualRecordIcon className="icon-dot" />
                                 <span className="video-time-upload">
@@ -221,7 +296,9 @@ const Video = () => {
                             </div>
                         </div>
                         <div className="box-comment">
-                            <h3 className="box-comment-title">Comments</h3>
+                            <h3 className="box-comment-title">
+                                {t("comment.Comments")}
+                            </h3>
                             <Comments videoId={path} />
                             {/* <div className="list-comment">
                                 <Comment />

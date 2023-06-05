@@ -1,3 +1,4 @@
+@import "../../style/_mixins.scss";
 .blog {
     padding: 40px 50px 40px 50px;
     display: flex;
@@ -6,13 +7,27 @@
     align-items: center;
     position: relative;
     min-height: 700px;
+    & h1 {
+        text-align: center;
+    }
     .blog-container {
-        margin-top: 50px;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 100px;
-        padding: 0 30px;
-        row-gap: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .list-blog {
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 100px;
+            padding: 0 30px;
+            row-gap: 50px;
+            @include respond(mobile) {
+                grid-template-columns: 1fr;
+            }
+        }
+        .loading {
+            margin-top: 20px;
+        }
     }
     .create-blog-btn {
         position: fixed;

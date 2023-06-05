@@ -1,11 +1,15 @@
+@import "../../style/_mixins.scss";
 .messenger {
     padding: 20px;
     flex: 2;
     height: 580px;
+    @include respond(mobile) {
+        height: 490px;
+    }
     .messenger-header {
         display: flex;
         gap: 10px;
-        border-bottom: 1px solid var(--clr-white);
+        border-bottom: 1px solid #ebebeb;
         width: 100%;
         align-items: center;
 
@@ -44,7 +48,16 @@
         margin-top: 20px;
         display: flex;
         align-items: center;
-
+        position: relative;
+        .icon-emoji {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .emoji-box {
+            position: absolute;
+            left: 0;
+            top: -455px;
+        }
         .chat-input {
             flex: 10;
             background-color: #f5f5f5;

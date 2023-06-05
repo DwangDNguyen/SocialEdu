@@ -7,8 +7,12 @@ import {
     subscribe,
     unsubscribe,
     updateUser,
+    getAllUser,
+    getUserMostSubscribed,
+    getNewUsers,
+    deleteUser,
 } from "../controllers/userController.js";
-import { verifyToken } from "../middleware/auth.js";
+import { isAdmin, verifyToken } from "../middleware/auth.js";
 // import verifyUser from "./verifyToken.js";
 
 //get user
@@ -20,4 +24,8 @@ router.put("/like/:videoId", verifyToken, like);
 router.put("/dislike/:videoId", verifyToken, dislike);
 router.put("/sub/:id", verifyToken, subscribe);
 router.put("/unsub/:id", verifyToken, unsubscribe);
+router.get("/getAllUser", getAllUser);
+router.get("/getUserMostSubscribed", getUserMostSubscribed);
+router.get("/getNewUsers", getNewUsers);
+router.delete("/delete/:id", isAdmin, deleteUser);
 export default router;

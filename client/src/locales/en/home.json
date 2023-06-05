@@ -1,0 +1,17 @@
+{
+    "home": {
+        "Home": "Home",
+        "Calendar": "Calendar",
+        "Blog": "Blog",
+        "Setting": "Setting",
+        "Profile": "Profile",
+        "Logout": "Logout",
+        "Main": "Main",
+        "Useful": "Useful",
+        "Service": "Service",
+        "User": "User"
+    },
+    "list video": {
+        "views": "views"
+    }
+}

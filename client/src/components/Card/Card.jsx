@@ -6,8 +6,10 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { user } from "../../redux/axios/axios";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
+import { useTranslation } from "react-i18next";
 const Card = ({ video }) => {
     const [channel, setChannel] = useState({});
+    const { t } = useTranslation();
     const currentUser = useSelector((state) => state.user.user);
     useEffect(() => {
         const thisChannel = async () => {
@@ -53,7 +55,7 @@ const Card = ({ video }) => {
                             )}
                             <div className="video-interact">
                                 <span className="video-view">
-                                    {video.views} views
+                                    {video.views} {t("list video.views")}
                                 </span>
                                 <FiberManualRecordIcon className="icon-dot" />
                                 <span className="video-time-upload">

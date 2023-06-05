@@ -18,6 +18,10 @@
                 gap: 20px;
             }
             .info-option {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                .subscribe-btn,
                 .chat-btn {
                     cursor: pointer;
                     padding: 5px 30px;
@@ -110,10 +114,11 @@
                         }
                     }
                     .select {
-                        border-bottom: 2px solid var(--clr-grey-10);
+                        border-bottom: 2px solid rgb(107, 107, 107);
                         // transition: 0.4s ease-in-out;
                     }
                 }
+                .list-blog-profile,
                 .list-video {
                     display: grid;
                     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -203,6 +208,12 @@
                 }
             }
         }
+    }
+    .loading {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     // }
 }

@@ -45,6 +45,7 @@
 //         padding: 20px;
 //     }
 // }
+@import "../../style/_mixins.scss";
 .home {
     height: calc(100% - 51px);
 }
@@ -53,6 +54,9 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+    @include respond(mobile) {
+        min-height: 100vh;
+    }
 }
 .video-list {
     display: grid;
@@ -60,4 +64,12 @@
     gap: 100px;
     grid-row-gap: 30px;
     padding: 50px 50px;
+    @include respond(mobile) {
+        grid-template-columns: 1fr;
+        min-height: 90.5vh;
+        padding: 50px 100px;
+    }
+    @include respond(tablet) {
+        grid-template-columns: 1fr 1fr;
+    }
 }

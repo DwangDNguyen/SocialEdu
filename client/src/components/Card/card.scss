@@ -1,3 +1,4 @@
+@import "../../style/_mixins.scss";
 .video-item {
     flex: 1;
     width: 100%;
@@ -14,8 +15,14 @@
     .video-content {
         display: flex;
         margin-top: 10px;
+        @include respond(mobile) {
+            gap: 10px;
+        }
         .avt-author {
             flex: 1;
+            @include respond(mobile) {
+                flex: initial;
+            }
             & img {
                 width: 30px;
                 height: 30px;

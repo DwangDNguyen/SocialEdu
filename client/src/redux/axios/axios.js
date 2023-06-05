@@ -97,3 +97,10 @@ post.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+
+export const notification = axios.create({
+    baseURL: "http://localhost:5000/api/notification",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});

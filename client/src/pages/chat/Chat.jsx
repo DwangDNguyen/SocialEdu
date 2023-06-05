@@ -18,6 +18,7 @@ const Chat = () => {
     const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingConversation, setLoadingConversation] = useState(true);
     // const [haveConversation, setHaveConversation] = useState(true);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const socket = useRef();
@@ -49,14 +50,14 @@ const Chat = () => {
     useEffect(() => {
         const getConversations = async () => {
             try {
-                setLoading(true);
+                setLoadingConversation(true);
 
                 const res = await conversation.get("/" + currentUser._id);
                 // await conversation.delete("/");
                 setConversations(res.data);
 
                 setTimeout(() => {
-                    setLoading(false);
+                    setLoadingConversation(false);
                 }, 3000);
             } catch (err) {
                 console.log(err);
@@ -115,19 +116,24 @@ const Chat = () => {
             )}
 
             <div className="chat-conversation">
-                {conversations.map((conversation, index) => (
-                    <div
-                        onClick={() => {
-                            setCurrentChat(conversation);
-                        }}
-                        key={index}
-                    >
-                        <Conversation
-                            conversation={conversation}
-                            currentUser={currentUser}
-                        />
-                    </div>
-                ))}
+                {}
+                {loadingConversation ? (
+                    <ReactLoading type="spokes" color="#a12727" />
+                ) : (
+                    conversations.map((conversation, index) => (
+                        <div
+                            onClick={() => {
+                                setCurrentChat(conversation);
+                            }}
+                            key={index}
+                        >
+                            <Conversation
+                                conversation={conversation}
+                                currentUser={currentUser}
+                            />
+                        </div>
+                    ))
+                )}
             </div>
             {/* </div>
             </div> */}

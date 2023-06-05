@@ -1,3 +1,4 @@
+@import "../../style/_mixins.scss";
 .login {
     // background: #ce2200;
     // background: -moz-linear-gradient(
@@ -21,6 +22,9 @@
     background: linear-gradient(#30142b, #a12727);
     min-height: 100vh;
     padding-top: 150px;
+    @include respond(mobile) {
+        padding-top: 0px;
+    }
     .login-container {
         background: rgba(0, 0, 0, 0.5);
         // box-sizing: border-box;
@@ -32,7 +36,12 @@
         border-radius: var(--radius);
         padding: 20px;
         min-height: 55vh;
-
+        @include respond(mobile) {
+            min-height: 100vh;
+            justify-content: center;
+            margin: initial;
+            max-width: initial;
+        }
         .login-title {
             font-size: 40px;
             font-weight: bold;

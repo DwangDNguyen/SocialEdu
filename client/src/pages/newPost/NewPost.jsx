@@ -4,7 +4,10 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { post } from "../../redux/axios/axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 const NewPost = () => {
+    const { t } = useTranslation("blog");
     const [formErrors, setFormErrors] = useState({});
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState(null);
@@ -52,15 +55,32 @@ const NewPost = () => {
     const handlePost = async (e) => {
         e.preventDefault();
         setFormErrors(validate(image, title, content));
-        console.log({ image, title, content });
-        await post.post("/", { image: image, title: title, content: content });
-        navigate("/blog");
+        try {
+            await post.post("/", {
+                image: image,
+                title: title,
+                content: content,
+            });
+            toast.success("Create a new post successfully", {
+                autoClose: 4000,
+                onClose: () => {
+                    navigate(`/blog`);
+                },
+                theme: "dark",
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        // navigate("/blog");
     };
     return (
         <div className="newPost">
-            <h2>Create a new post</h2>
+            <ToastContainer position="top-center" />
+            <h2>{t("create post.Create a new post")}</h2>
             <div className="newPost-input">
-                <label htmlFor="ImgUrl">Upload a post image: </label>
+                <label htmlFor="ImgUrl">
+                    {t("create post.Upload a post image:")}{" "}
+                </label>
                 <input
                     type="file"
                     accept="image/*"
@@ -71,7 +91,7 @@ const NewPost = () => {
             </div>
 
             <div className="newPost-input">
-                <label htmlFor="title">Title: </label>
+                <label htmlFor="title">{t("create post.Title:")} </label>
                 <input
                     type="text"
                     placeholder="Title"
@@ -83,7 +103,7 @@ const NewPost = () => {
             </div>
 
             <div className="newPost-input">
-                <span>Write content:</span>
+                <span>{t("create post.Write content:")}</span>
                 <div>
                     <CKEditor
                         editor={ClassicEditor}
@@ -112,7 +132,7 @@ const NewPost = () => {
             </div>
 
             <div className="post-btn" onClick={handlePost}>
-                Post
+                {t("create post.Post")}
             </div>
         </div>
     );

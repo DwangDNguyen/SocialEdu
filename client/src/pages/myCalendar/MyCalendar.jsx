@@ -14,6 +14,7 @@ import { connect, useSelector } from "react-redux";
 import { showEventApi, ShowEventsApi } from "../../redux/actions/eventsAction";
 import { closeEvent } from "../../redux/actions/modalAction";
 import enUS from "date-fns/locale/en-US";
+import { useTranslation } from "react-i18next";
 const locales = {
     "en-US": enUS,
 };
@@ -35,6 +36,7 @@ const MyCalendar = ({
     const [open, setOpen] = useState(false);
     const [renderStatus, rerender] = useState(false);
     const currentUser = useSelector((state) => state.user.user);
+    const { t } = useTranslation("calendar");
     // console.log(currentUser);
     useEffect(() => {
         ShowEventsApi(currentUser._id);
@@ -67,40 +69,32 @@ const MyCalendar = ({
                 <Navbar />
                 <div className="calendar-content"> */}
             <div className="top">
-                <h1 className="new-title">{title}</h1>
-                {currentUser ? (
-                    <Link to="/event/add">
-                        <div className="btn-new">
-                            New <AddIcon className="icon-new" />
-                        </div>
-                    </Link>
-                ) : (
-                    <></>
-                )}
+                <h1 className="new-title">{t("create event." + title)}</h1>
+                <Link to="/event/add">
+                    <div className="btn-new">
+                        {t("create event.New")} <AddIcon className="icon-new" />
+                    </div>
+                </Link>
             </div>
-            {currentUser ? (
-                <div className="bottom">
-                    <Popping
-                        open={open}
-                        handleOpen={openEventClick}
-                        handleClose={closeEventClick}
-                        renderStatus={renderStatus}
-                        rerender={rerender}
-                    />
-                    <Calendar
-                        localizer={localizer}
-                        events={events}
-                        startAccessor="start"
-                        endAccessor="end"
-                        style={{ height: 500 }}
-                        onSelectEvent={openEventClick}
-                    />
-                </div>
-            ) : (
-                <div className="bottom">
-                    <h2 className="notify">Login to use calendar</h2>
-                </div>
-            )}
+
+            <div className="bottom">
+                <Popping
+                    open={open}
+                    handleOpen={openEventClick}
+                    handleClose={closeEventClick}
+                    renderStatus={renderStatus}
+                    rerender={rerender}
+                />
+                <Calendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: 500 }}
+                    onSelectEvent={openEventClick}
+                />
+            </div>
+
             {/* </div>
             </div> */}
         </div>

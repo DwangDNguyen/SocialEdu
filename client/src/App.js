@@ -33,6 +33,11 @@ import Search from "./pages/search/Search";
 import Blogs from "./pages/blogs/Blogs";
 import Post from "./pages/post/Post";
 import NewPost from "./pages/newPost/NewPost";
+import EditPost from "./pages/EditPost/EditPost";
+import CustomUser from "./pages/customUser/CustomUser";
+import CustomVideo from "./pages/customVideo/CustomVideo";
+import AdminUser from "./pages/adminUser/AdminUser";
+import AdminVideo from "./pages/adminVideo/AdminVideo";
 function App() {
     const { darkMode } = useContext(DarkModeContext);
     // const { currentUser } = useContext(AuthContext);
@@ -279,6 +284,66 @@ function App() {
                             <PrivateRoute>
                                 <Layout>
                                     <NewPost />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/blog/edit/:id"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <EditPost />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/list"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <List title="List Users" />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/listUser"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <CustomUser />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/listVideo"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <CustomVideo />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/users"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <AdminUser />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/videos"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <AdminVideo />
                                 </Layout>
                             </PrivateRoute>
                         }

@@ -13,8 +13,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next";
 const Setting = () => {
     const currentUser = useSelector((state) => state.user.user);
+    const { t } = useTranslation("setting");
     const dispatch = useDispatch();
     const initialValues = {
         username: currentUser.username,
@@ -168,7 +170,7 @@ const Setting = () => {
                                 <img
                                     src={
                                         file ||
-                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRblGHmIA70kc9T4UJy-AFc0YLcnPpu5kwR2Q&usqp=CAU"
+                                        "https://thumbs.dreamstime.com/b/test-icon-vector-question-mark-female-user-person-profile-avatar-symbol-help-sign-glyph-pictogram-illustration-test-168789128.jpg"
                                     }
                                 />
                             </label>
@@ -182,7 +184,7 @@ const Setting = () => {
                         </div>
                         <div className="setting-field">
                             <div className="setting-info">
-                                Username:{" "}
+                                {t("setting.Username")}:{" "}
                                 {showInput.username === false
                                     ? values.username
                                     : currentUser.username}
@@ -190,7 +192,9 @@ const Setting = () => {
                                     className="change-btn"
                                     onClick={() => showInputChange("username")}
                                 >
-                                    {showInput.username ? "Update" : "Change"}
+                                    {showInput.username
+                                        ? t("setting.Update")
+                                        : t("setting.Change")}
                                 </div>
                             </div>
                             {showInput.username && (
@@ -213,7 +217,7 @@ const Setting = () => {
                         </div>
                         <div className="setting-field">
                             <div className="setting-info">
-                                Phone:{" "}
+                                {t("setting.Phone")}: {""}
                                 {showInput.phone === false
                                     ? values.phone
                                     : currentUser.phone}
@@ -221,7 +225,9 @@ const Setting = () => {
                                     className="change-btn"
                                     onClick={() => showInputChange("phone")}
                                 >
-                                    {showInput.phone ? "Update" : "Change"}
+                                    {showInput.phone
+                                        ? t("setting.Update")
+                                        : t("setting.Change")}
                                 </div>
                             </div>
                             {showInput.phone && (
@@ -244,7 +250,7 @@ const Setting = () => {
                         </div>
                         <div className="setting-field">
                             <div className="setting-info">
-                                Email:{" "}
+                                {t("setting.Email")}:{" "}
                                 {showInput.email === false
                                     ? values.email
                                     : currentUser.email}
@@ -252,7 +258,9 @@ const Setting = () => {
                                     className="change-btn"
                                     onClick={() => showInputChange("email")}
                                 >
-                                    {showInput.email ? "Update" : "Change"}
+                                    {showInput.email
+                                        ? t("setting.Update")
+                                        : t("setting.Change")}
                                 </div>
                             </div>
                             {showInput.email && (
@@ -290,7 +298,9 @@ const Setting = () => {
                                 />
                             </div> */}
                         <div className="setting-submit">
-                            <button className="submit-change">Submit</button>
+                            <button className="submit-change">
+                                {t("setting.Submit")}
+                            </button>
                         </div>
                     </form>
                 </div>

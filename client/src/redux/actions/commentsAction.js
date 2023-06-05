@@ -26,3 +26,16 @@ export const deleteComment = (value) => async (dispatch) => {
         console.log(err);
     }
 };
+
+export const editComment = (value) => async (dispatch) => {
+    try {
+        const { data } = await comment.put(`/update/${value._id}`, {
+            desc: value.desc,
+            videoId: value.videoId,
+        });
+        console.log(data);
+        dispatch({ type: "UPDATE_COMMENT", payload: data });
+    } catch (err) {
+        console.log(err);
+    }
+};

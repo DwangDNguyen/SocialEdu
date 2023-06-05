@@ -1,3 +1,4 @@
+@import "../../style/_mixins.scss";
 .conversation {
     flex: 1;
     display: flex;
@@ -5,6 +6,11 @@
     gap: 10px;
     padding: 10px;
     cursor: pointer;
+    & span {
+        @include respond(mobile) {
+            display: none;
+        }
+    }
     & img {
         width: 40px;
         height: 40px;
@@ -13,5 +19,8 @@
     }
     &:hover {
         background-color: #f5f5f5;
+    }
+    @include respond(mobile) {
+        padding: 0 10px 0 0;
     }
 }

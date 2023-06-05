@@ -1,0 +1,18 @@
+{
+    "home": {
+        "Home": "Trang Chủ",
+        "Calendar": "Lập Lịch",
+        "Blog": "Blog",
+        "Setting": "Cài Đặt",
+        "Profile": "Trang Cá Nhân",
+        "Logout": "Đăng Xuất",
+        "Main": "Phần Chính",
+        "Useful": "Tiện Ích",
+        "Service": "Dịch Vụ",
+        "User": "Người dùng",
+        "views": "lượt xem"
+    },
+    "list video": {
+        "views": "lượt xem"
+    }
+}

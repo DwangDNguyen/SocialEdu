@@ -2,15 +2,16 @@
 import React, { useState, useEffect } from "react";
 import "./comment.scss";
 import { user } from "../../redux/axios/axios";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useDispatch, useSelector } from "react-redux";
 import ClearIcon from "@mui/icons-material/Clear";
 import { deleteComment } from "../../redux/actions/commentsAction";
 import { format } from "timeago.js";
-const Comment = ({ comment, handleDeleteCmt }) => {
+const Comment = ({ comment, handleDeleteCmt, handleEditCmt }) => {
     const [channel, setChannel] = useState({});
     const currentUser = useSelector((state) => state.user.user);
     const dispatch = useDispatch();
+    const [openBlock, setOpenBlock] = useState(false);
     useEffect(() => {
         try {
             const fetchComment = async () => {
@@ -24,6 +25,10 @@ const Comment = ({ comment, handleDeleteCmt }) => {
     }, [comment.userId]);
     const deleteCmt = () => {
         handleDeleteCmt(comment._id);
+    };
+    const editCmt = () => {
+        handleEditCmt(comment);
+        console.log(comment);
     };
     return (
         <div className="comment">
@@ -41,13 +46,31 @@ const Comment = ({ comment, handleDeleteCmt }) => {
                 </div>
                 <div className="comment-user-content">{comment.desc}</div>
             </div>
-            {comment.userId === currentUser._id ? (
-                <div className="option-comment">
-                    <ClearIcon
-                        className="option-comment-icon"
-                        onClick={deleteCmt}
-                    />
-                </div>
+            {comment.userId === currentUser._id || currentUser?.isAdmin ? (
+                <>
+                    <div className="option-comment">
+                        <MoreHorizIcon
+                            className="option-comment-icon"
+                            onClick={() => setOpenBlock(!openBlock)}
+                        />
+                    </div>
+                    {openBlock && (
+                        <div className="block-option">
+                            <div
+                                className="block-option-item delete"
+                                onClick={deleteCmt}
+                            >
+                                Delete
+                            </div>
+                            <div
+                                className="block-option-item edit"
+                                onClick={editCmt}
+                            >
+                                Edit
+                            </div>
+                        </div>
+                    )}
+                </>
             ) : (
                 ""
             )}

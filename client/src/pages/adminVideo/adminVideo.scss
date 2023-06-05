@@ -1,0 +1,11 @@
+.admin-video {
+    padding: 20px;
+    .admin-video-top {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr 2fr;
+    }
+    .admin-video-bottom {
+        margin-top: 20px;
+    }
+}

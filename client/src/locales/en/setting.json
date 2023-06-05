@@ -1,0 +1,24 @@
+{
+    "setting": {
+        "Username": "Username",
+        "Phone": "Phone",
+        "Email": "Email",
+        "Change": "Change",
+        "Update": "Update",
+        "Submit": "Submit"
+    },
+    "profile": {
+        "Username": "Username",
+        "Phone": "Phone",
+        "Playlist": "Playlist",
+        "views": "views",
+        "view": "view",
+        "Subscribers": "Subscribers"
+    },
+    "delete video": {
+        "Delete video": "Delete video",
+        "Are you sure you want to delete this video?": "Are you sure you want to delete this video?",
+        "Cancel": "Cancel",
+        "Delete": "Delete"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "video": {
+        "views": "views",
+        "view": "view",
+        "Subscribe": "Subscribe",
+        "Subscribed": "Subscribed",
+        "Dislike": "Dislike",
+        "Share": "Share",
+        "Download": "Download",
+        "Subscribers": "Subscribers",
+        "Top videos most views": "Top videos most views"
+    },
+    "comment": {
+        "Comments": "Comments",
+        "Add a comment...": "Add a comment..."
+    }
+}

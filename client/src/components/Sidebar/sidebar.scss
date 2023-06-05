@@ -1,12 +1,69 @@
+@import "../../style/_mixins.scss";
+
 .sidebar {
     border-right: 2px solid var(--clr-grey-9);
     background-color: #fff;
     min-height: 100vh;
     position: relative;
-    .handleMenu {
+
+    @include respond(mobile) {
+        // display: none;
+        position: fixed;
+        left: -100%;
+    }
+    @include respond(tablet) {
+        position: fixed;
+        left: -100%;
+    }
+}
+.openRes {
+    display: none;
+    width: 200px;
+    @include respond(mobile) {
+        display: block;
+        left: 0;
+        z-index: 100;
+    }
+    @include respond(tablet) {
+        display: block;
+        left: 0;
+        z-index: 100;
+    }
+    .search {
+        display: flex;
+        align-items: center;
         position: absolute;
-        right: 0;
-        bottom: 20px;
+        bottom: 10px;
+        // padding: 20px;
+        // @include respond(mobile) {
+        //     display: none;
+        // }
+        .search-input {
+            border: 0.5px solid var(--clr-grey-8);
+            padding: 8px 10px;
+            font-size: 12px;
+            border-top-left-radius: var(--radius);
+            border-bottom-left-radius: var(--radius);
+            border-right: none;
+            background: transparent;
+            max-width: 150px;
+            margin-left: 5px;
+        }
+        .search-input:focus {
+            border-color: var(--clr-red-dark);
+        }
+        .search-button {
+            background-color: var(--clr-red-dark);
+            padding: 8px 10px;
+            color: var(--clr-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0.5px solid transparent;
+            border-top-right-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+            max-height: 32px;
+        }
     }
 }
 .top {
@@ -17,6 +74,14 @@
     height: 50px;
     position: sticky;
     top: 0;
+}
+
+.menu-icon-sidebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    cursor: pointer;
 }
 .logo {
     font-size: 2rem;

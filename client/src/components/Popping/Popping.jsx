@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import { parse, format } from "date-fns";
+import { useTranslation } from "react-i18next";
 const Popping = ({
     open,
     handleClose,
@@ -26,6 +27,7 @@ const Popping = ({
 }) => {
     const navigate = useNavigate();
     const { id, describe, title, start, end } = event;
+    const { t } = useTranslation("calendar");
     console.log(event);
     // console.log(end);
     const handleDelete = async () => {
@@ -110,14 +112,14 @@ const Popping = ({
                         className="describe-modal"
                         sx={{ mt: 2 }}
                     >
-                        From: {start}
+                        {t("popping.From")}: {start}
                     </Typography>
                     <Typography
                         id="modal-modal-description"
                         className="describe-modal"
                         sx={{ mt: 2 }}
                     >
-                        To: {end}
+                        {t("popping.To")}: {end}
                     </Typography>
                     <Stack
                         spacing={2}
@@ -130,21 +132,21 @@ const Popping = ({
                             className="btn btn-cancel"
                             onClick={handleClose}
                         >
-                            Cancel
+                            {t("popping.Cancel")}
                         </Button>
                         <Button
                             variant="contained"
                             className="btn btn-delete"
                             onClick={handleDelete}
                         >
-                            Delete
+                            {t("popping.Delete")}
                         </Button>
                         <Link to={`/event/${id}/update`}>
                             <Button
                                 variant="contained"
                                 className="btn btn-update"
                             >
-                                Update
+                                {t("popping.Update")}
                             </Button>
                         </Link>
                     </Stack>

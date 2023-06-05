@@ -15,7 +15,7 @@ export const deleteComment = async (req, res, next) => {
         // const video = await Video.findById(res.params.id);
         console.log(comment);
 
-        if (req.user.userId === comment.userId) {
+        if (req.user.userId === comment.userId || req.user.isAdmin) {
             await Comment.deleteOne({ _id: req.params.id });
             res.status(200).json("Comment deleted");
         } else {
@@ -30,6 +30,25 @@ export const getComments = async (req, res, next) => {
     try {
         const comment = await Comment.find({ videoId: req.params.videoId });
         res.status(200).json(comment);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const updateComment = async (req, res, next) => {
+    try {
+        const thisComment = await Comment.findById(req.params.id);
+        if (!thisComment) return res.status(404).json("thisComment not found");
+        if (req.user.userId === thisComment.userId || req.user.isAdmin) {
+            const updatedVideo = await Video.findByIdAndUpdate(
+                req.params.id,
+                { $set: req.body },
+                { new: true }
+            );
+            res.status(200).json(updatedVideo);
+        }
+
+        res.status(200).json(updatedComment);
     } catch (err) {
         next(err);
     }

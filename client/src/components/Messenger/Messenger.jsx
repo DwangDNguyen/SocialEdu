@@ -3,9 +3,20 @@ import React, { useEffect, useRef, useState } from "react";
 import "./messenger.scss";
 import Message from "../Message/Message";
 import SendIcon from "@mui/icons-material/Send";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ReactLoading from "react-loading";
 import { user, message } from "../../redux/axios/axios";
 import { io } from "socket.io-client";
+import EmojiPicker, {
+    EmojiStyle,
+    SkinTones,
+    Theme,
+    Categories,
+    EmojiClickData,
+    Emoji,
+    SuggestionMode,
+    SkinTonePickerLocation,
+} from "emoji-picker-react";
 // import { current } from "@reduxjs/toolkit";
 
 const Messenger = ({
@@ -20,7 +31,8 @@ const Messenger = ({
     const [newMessage, setNewMessage] = useState("");
     const messageRef = useRef();
     // console.log(userChat);
-
+    const [selectedEmoji, setSelectedEmoji] = useState("");
+    const [openEmoji, setOpenEmoji] = useState(false);
     const handleAddNewMessage = async (e) => {
         e.preventDefault();
         const thisMessage = {
@@ -62,7 +74,11 @@ const Messenger = ({
     useEffect(() => {
         messageRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
-
+    const onClick = (emojiObject, event) => {
+        let message = newMessage;
+        message += emojiObject.emoji;
+        setNewMessage(message);
+    };
     return (
         <div className="messenger">
             <div className="messenger-header">
@@ -93,6 +109,20 @@ const Messenger = ({
                 <Message own={true} /> */}
             </div>
             <div className="messenger-input">
+                <EmojiEmotionsIcon
+                    className="icon icon-emoji"
+                    onClick={() => setOpenEmoji(!openEmoji)}
+                />
+                {openEmoji && (
+                    <div className="emoji-box">
+                        <EmojiPicker
+                            onEmojiClick={onClick}
+                            autoFocusSearch={false}
+                            theme={Theme.DARK}
+                        />
+                    </div>
+                )}
+
                 <input
                     type="text"
                     className="chat-input"

@@ -1,0 +1,29 @@
+.new-user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100% !important;
+    padding: 20px;
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    border-radius: var(--radius);
+    .css-132a6sb-MuiTableCell-root.MuiTableCell-body {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    // .css-apqrd9-MuiTableBody-root {
+    //     background-color: #373737;
+    //     & th,
+    //     td {
+    //         color: var(--clr-white) !important;
+    //     }
+    // }
+    .avatar {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+    }
+}

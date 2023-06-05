@@ -1,7 +1,11 @@
+@import "../../style/_mixins.scss";
 .setting {
     // display: grid;
     // grid-template-columns: 1fr 6fr;
     // width: 100%;
+    @include respond(mobile) {
+        min-height: 93vh;
+    }
 }
 // .container {
 .setting-content {

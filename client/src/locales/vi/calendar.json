@@ -1,0 +1,28 @@
+{
+    "create event": {
+        "Add Event": "Lập lịch",
+        "Event Title": "Tiêu đề sự kiện",
+        "Start Date": "Thời gian bắt đầu",
+        "End Date": "Thời gian kết thúc",
+        "Event Description": "Mô tả sự kiện",
+        "Optional": "Tùy chọn",
+        "Title": "Tiêu đề",
+        "Select Date": "Chọn thời gian bắt đầu",
+        "Select End Date": "Chọn thời gian kết thúc",
+        "Describe your event": "Mô tả sự kiện của bạn",
+        "Create": "Tạo",
+        "New": "Thêm",
+        "Calendar": "Lịch"
+    },
+    "popping": {
+        "From": "Từ",
+        "To": "Đến",
+        "Cancel": "Hủy",
+        "Delete": "Xóa",
+        "Update": "Cập nhật"
+    },
+    "update event": {
+        "Update Event": "Cập nhật sự kiện",
+        "Update": "Cập nhật"
+    }
+}

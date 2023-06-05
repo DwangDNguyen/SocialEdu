@@ -1,8 +1,10 @@
+@import "../../style/_mixins.scss";
 .profile {
     // display: grid;
     // grid-template-columns: 1fr 6fr;
     // width: 100%;
     position: relative;
+    min-height: 702px;
     // .container {
     .profile-content {
         padding: 20px;
@@ -84,7 +86,7 @@
                         padding: 10px 0;
                         min-width: 100px;
                         text-align: center;
-                        margin-left: 0;
+                        margin-left: 20px;
                         margin-top: 0;
                         cursor: pointer;
                         &:hover {
@@ -96,13 +98,16 @@
                         // transition: 0.4s ease-in-out;
                     }
                 }
+                .list-blog-profile,
                 .list-video {
                     display: grid;
                     grid-template-columns: 1fr 1fr 1fr 1fr;
                     gap: 20px;
                     grid-row-gap: 20px;
                     margin-top: 20px;
-
+                    @include respond(mobile) {
+                        grid-template-columns: 1fr 1fr;
+                    }
                     .video-item {
                         position: relative;
                         .icon-delete {
@@ -168,6 +173,7 @@
                         }
                     }
                 }
+
                 .loading {
                     display: flex;
                     justify-content: center;

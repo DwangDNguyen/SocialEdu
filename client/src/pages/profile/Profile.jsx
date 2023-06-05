@@ -12,22 +12,25 @@ import Navbar from "../../components/Navbar/Navbar";
 import { useSelector } from "react-redux";
 import ListVideos from "../../components/ListVideos/ListVideos";
 import CardProfile from "../../components/CardProfile/CardProfile";
-import { video } from "../../redux/axios/axios";
+import { post, video } from "../../redux/axios/axios";
 import { useDispatch } from "react-redux";
 import { format } from "timeago.js";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
     const currentUser = useSelector((state) => state.user.user);
     const [listVid, setListVid] = useState([]);
+    const [listBlog, setListBlog] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-    const tabs = ["Video", "Playlist"];
     const [tabSelected, setTabSelected] = useState(0);
     const [isPlaylist, setIsPlayList] = useState(false);
     const [listVidPlaylist, setListVidPlaylist] = useState([]);
-
+    const [allVid, setAllVid] = useState([]);
+    const { t } = useTranslation("setting");
     const dispatch = useDispatch();
-
+    const tabs = ["Video", t("profile.Playlist"), "Blog", "Liked Videos"];
+    const listVidLiked = [];
     const handleTabClick = (index) => {
         setTabSelected(index);
         if (tabSelected === 1) {
@@ -39,8 +42,13 @@ const Profile = () => {
         const fetchData = async () => {
             setIsLoading(true);
             const resListVid = await video.get("/findUser/" + currentUser._id);
+            const resAllVid = await video.get("/getAllVideos");
+            const resListBlog = await post.get("/listPost/" + currentUser._id);
+
             // console.log(resListVid);
             setListVid(resListVid.data);
+            setListBlog(resListBlog.data);
+            setAllVid(resAllVid.data);
             // dispatch(showVideos(currentUser._id));
             setIsLoading(false);
         };
@@ -78,6 +86,11 @@ const Profile = () => {
 
         setIsPlayList(true);
     };
+    allVid.forEach((vid) => {
+        if (vid.likes.includes(currentUser._id)) {
+            listVidLiked.push(vid);
+        }
+    });
 
     return (
         <div className="profile">
@@ -103,9 +116,19 @@ const Profile = () => {
                             </span>
                         </div>
                         <div className="info-item">
-                            <span className="info-title">Phone:</span>
+                            <span className="info-title">
+                                {t("profile.Phone")}:
+                            </span>
                             <span className="info-content">
                                 {currentUser.phone}
+                            </span>
+                        </div>
+                        <div className="info-item">
+                            <span className="info-title">
+                                {t("profile.Subscribers")}:
+                            </span>
+                            <span className="info-content">
+                                {currentUser.subscribers}
                             </span>
                         </div>
                         {/* <div className="info-item">
@@ -146,55 +169,6 @@ const Profile = () => {
                         {tabSelected === 0 && (
                             <div className="list-video profile-list-video">
                                 {listVid?.map((video) => (
-                                    // <div className="video-item">
-                                    //     <Link to={`/video/${video._id}`}>
-                                    //         <div className="img-vid">
-                                    //             <img src={video.ImgUrl} />
-                                    //         </div>
-                                    //         <div className="video-content">
-                                    //             <div className="avt-author">
-                                    //                 <Link
-                                    //                     to={`/profile/${currentUser._id}`}
-                                    //                 >
-                                    //                     <img
-                                    //                         src={
-                                    //                             currentUser.avatar
-                                    //                         }
-                                    //                     />
-                                    //                 </Link>
-                                    //             </div>
-                                    //             <div className="video-info">
-                                    //                 <h1 className="video-title">
-                                    //                     {video.title}
-                                    //                 </h1>
-                                    //                 <span className="name-author">
-                                    //                     {
-                                    //                         currentUser.username
-                                    //                     }
-                                    //                 </span>
-                                    //                 <div className="video-interact">
-                                    //                     <span className="video-view">
-                                    //                         {video.views}{" "}
-                                    //                         views
-                                    //                     </span>
-                                    //                     <FiberManualRecordIcon className="icon-dot" />
-                                    //                     <span className="video-time-upload">
-                                    //                         {format(
-                                    //                             video.createdAt
-                                    //                         )}
-                                    //                     </span>
-                                    //                 </div>
-                                    //             </div>
-                                    //         </div>
-                                    //     </Link>
-
-                                    //     <DeleteIcon
-                                    //         className="icon-delete"
-                                    //         onClick={() =>
-                                    //             setOpenModal(true)
-                                    //         }
-                                    //     />
-                                    // </div>
                                     <CardProfile
                                         video={video}
                                         currentUser={currentUser}
@@ -232,54 +206,6 @@ const Profile = () => {
                         {tabSelected === 1 && isPlaylist === true && (
                             <div className="list-video profile-list-video">
                                 {listVidPlaylist?.map((video) => (
-                                    // <div className="video-item">
-                                    //     <Link to={`/video/${video._id}`}>
-                                    //         <div className="img-vid">
-                                    //             <img src={video.ImgUrl} />
-                                    //         </div>
-                                    //         <div className="video-content">
-                                    //             <div className="avt-author">
-                                    //                 <Link
-                                    //                     to={`/profile/${currentUser._id}`}
-                                    //                 >
-                                    //                     <img
-                                    //                         src={
-                                    //                             currentUser.avatar
-                                    //                         }
-                                    //                     />
-                                    //                 </Link>
-                                    //             </div>
-                                    //             <div className="video-info">
-                                    //                 <h1 className="video-title">
-                                    //                     {video.title}
-                                    //                 </h1>
-                                    //                 <span className="name-author">
-                                    //                     {
-                                    //                         currentUser.username
-                                    //                     }
-                                    //                 </span>
-                                    //                 <div className="video-interact">
-                                    //                     <span className="video-view">
-                                    //                         {video.views}{" "}
-                                    //                         views
-                                    //                     </span>
-                                    //                     <FiberManualRecordIcon className="icon-dot" />
-                                    //                     <span className="video-time-upload">
-                                    //                         {format(
-                                    //                             video.createdAt
-                                    //                         )}
-                                    //                     </span>
-                                    //                 </div>
-                                    //             </div>
-                                    //         </div>
-                                    //     </Link>
-                                    //     <DeleteIcon
-                                    //         className="icon-delete"
-                                    //         onClick={() =>
-                                    //             setOpenModal(true)
-                                    //         }
-                                    //     />
-                                    // </div>
                                     <CardProfile
                                         video={video}
                                         currentUser={currentUser}
@@ -287,6 +213,82 @@ const Profile = () => {
                                         setOpenModal={setOpenModal}
                                         openModal={openModal}
                                     />
+                                ))}
+                            </div>
+                        )}
+                        {tabSelected === 2 && (
+                            <div className="list-blog-profile">
+                                {listBlog?.map((blog) => (
+                                    <Link to={`/blog/${blog._id}`}>
+                                        <div className="blog-container-item">
+                                            <div className="blog-container-item-img">
+                                                <img src={blog.image} />
+                                            </div>
+                                            <div className="blog-container-item-top">
+                                                <div className="blog-container-item-date">
+                                                    <span>
+                                                        {format(blog.createdAt)}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="blog-container-item-content">
+                                                <h2>{blog.title}</h2>
+                                                <div
+                                                    className="blog-container-item-content-text"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: blog.content,
+                                                    }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                        {tabSelected === 3 && (
+                            <div className="list-video profile-list-video">
+                                {listVidLiked?.map((video, index) => (
+                                    <Link
+                                        to={`/video/${video._id}`}
+                                        key={index}
+                                    >
+                                        <div className="video-item">
+                                            <div className="img-vid">
+                                                <img src={video.ImgUrl} />
+                                            </div>
+                                            <div className="video-content">
+                                                {/* <div className="avt-author">
+                                                    <Link
+                                                        to={`/channel/${channel._id}`}
+                                                    >
+                                                        <img
+                                                            src={channel.avatar}
+                                                        />
+                                                    </Link>
+                                                </div> */}
+                                                <div className="video-info">
+                                                    <h1 className="video-title">
+                                                        {video.title}
+                                                    </h1>
+                                                    {/* <span className="name-author">
+                                                        {channel.username}
+                                                    </span> */}
+                                                    <div className="video-interact">
+                                                        <span className="video-view">
+                                                            {video.views} views
+                                                        </span>
+                                                        <FiberManualRecordIcon className="icon-dot" />
+                                                        <span className="video-time-upload">
+                                                            {format(
+                                                                video.createdAt
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
                                 ))}
                             </div>
                         )}

@@ -1,0 +1,24 @@
+{
+    "setting": {
+        "Username": "Tên tài khoản",
+        "Phone": "Số điện thoại",
+        "Email": "Email",
+        "Change": "Thay đổi",
+        "Update": "Cập nhật",
+        "Submit": "Xác nhận"
+    },
+    "profile": {
+        "Username": "Tên tài khoản",
+        "Phone": "Số điện thoại",
+        "Playlist": "Danh sách phát",
+        "views": "lượt xem",
+        "view": "lượt xem",
+        "Subscribers": "Người theo dõi"
+    },
+    "delete video": {
+        "Delete video": "Xóa video",
+        "Are you sure you want to delete this video?": "Bạn có chắc muốn xóa video này?",
+        "Cancel": "Hủy",
+        "Delete": "Xóa"
+    }
+}

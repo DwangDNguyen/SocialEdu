@@ -1,5 +1,14 @@
+@import "../../style/_mixins.scss";
 .layout {
     display: grid;
     grid-template-columns: 1fr 6fr;
     width: 100%;
+    @include respond(mobile) {
+        grid-template-columns: 1fr;
+        position: relative;
+    }
+    @include respond(tablet) {
+        grid-template-columns: 1fr;
+        position: relative;
+    }
 }

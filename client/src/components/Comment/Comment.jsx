@@ -25,10 +25,11 @@ const Comment = ({ comment, handleDeleteCmt, handleEditCmt }) => {
     }, [comment.userId]);
     const deleteCmt = () => {
         handleDeleteCmt(comment._id);
+        setOpenBlock(!openBlock);
     };
     const editCmt = () => {
         handleEditCmt(comment);
-        console.log(comment);
+        setOpenBlock(!openBlock);
     };
     return (
         <div className="comment">
@@ -62,12 +63,14 @@ const Comment = ({ comment, handleDeleteCmt, handleEditCmt }) => {
                             >
                                 Delete
                             </div>
-                            <div
-                                className="block-option-item edit"
-                                onClick={editCmt}
-                            >
-                                Edit
-                            </div>
+                            {currentUser.isAdmin === false && (
+                                <div
+                                    className="block-option-item edit"
+                                    onClick={editCmt}
+                                >
+                                    Edit
+                                </div>
+                            )}
                         </div>
                     )}
                 </>

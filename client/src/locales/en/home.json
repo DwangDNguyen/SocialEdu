@@ -9,7 +9,8 @@
         "Main": "Main",
         "Useful": "Useful",
         "Service": "Service",
-        "User": "User"
+        "User": "User",
+        "Trending": "Trending"
     },
     "list video": {
         "views": "views"

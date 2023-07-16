@@ -4,17 +4,23 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { format } from "timeago.js";
 import { user } from "../../redux/axios/axios";
 
-const SearchItems = ({ videoSearch }) => {
+const SearchItems = ({ videoSearch, type }) => {
     const [channel, setChannel] = useState({});
     useEffect(() => {
         const thisChannel = async () => {
-            const res = await user.get("/find/" + videoSearch.userId);
+            const res = await user.get("/find/" + videoSearch?.userId);
             setChannel(res.data);
         };
         thisChannel();
-    }, [videoSearch.userId]);
+    }, [videoSearch?.userId]);
     return (
-        <div className="search-video-item">
+        <div
+            className={
+                type === "trending"
+                    ? "search-video-item item-trending"
+                    : "search-video-item"
+            }
+        >
             <div className="search-img-vid">
                 <img src={videoSearch.ImgUrl} />
             </div>

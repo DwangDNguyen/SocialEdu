@@ -5,6 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { video } from "../../redux/axios/axios";
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
 const Upload = ({ setOpen, type, videoCurrent }) => {
     const [videoUrl, setVideoUrl] = useState(null);
     const [ImgUrl, setImgUrl] = useState(
@@ -57,10 +58,10 @@ const Upload = ({ setOpen, type, videoCurrent }) => {
         const base64 = await convert(e.target.files[0]);
         setImgUrl(base64);
     };
-    // const onUploadVid = async (e) => {
-    //     const base64Vid = await convert(e.target.files[0]);
-    //     setVideoUrl(base64Vid);
-    // };
+    const onUploadVid = async (e) => {
+        const base64Vid = await convert(e.target.files[0]);
+        setInputs({ ...inputs, videoUrl: base64Vid });
+    };
 
     const handleUpload = async (e) => {
         e.preventDefault();
@@ -83,6 +84,7 @@ const Upload = ({ setOpen, type, videoCurrent }) => {
                     navigate(`/profile/${currentUser._id}`) &&
                     setOpen(false);
             }
+            setOpen(false);
         } else if (type === "update") {
             console.log(type);
             await video.put(`/update/${videoCurrent._id}`, {
@@ -90,12 +92,20 @@ const Upload = ({ setOpen, type, videoCurrent }) => {
                 tags,
                 ImgUrl,
             });
-            window.location.reload() && setOpen(false);
+            toast.success("Video Updated Successfully!!", {
+                autoClose: 3000,
+                onClose: () => {
+                    window.location.reload() && setOpen(false);
+                },
+                theme: "dark",
+            });
         }
+        // setOpen(false);
     };
     console.log(inputs);
     return (
         <div className="upload">
+            <ToastContainer position="top-center" />
             <div className="upload-container">
                 <div className="close-upload">
                     <CloseIcon onClick={() => setOpen(false)} />
@@ -106,20 +116,20 @@ const Upload = ({ setOpen, type, videoCurrent }) => {
                         : "Update a Video"}
                 </h1>
                 <label>Video:</label>
-                {/* <input
+                <input
                     type="file"
                     accept="video/*"
                     onChange={onUploadVid}
                     name="videoUrl"
                 />
-                <label>Or</label> */}
-                <input
+                {/* <label>Or</label> */}
+                {/* <input
                     type="text"
                     placeholder="videoUrl"
                     name="videoUrl"
                     onChange={handleChange}
                     value={inputs?.videoUrl}
-                />
+                /> */}
                 <input
                     type="text"
                     placeholder="Title"

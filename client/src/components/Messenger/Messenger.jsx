@@ -7,6 +7,7 @@ import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ReactLoading from "react-loading";
 import { user, message } from "../../redux/axios/axios";
 import { io } from "socket.io-client";
+import CryptoJS from "crypto-js";
 import EmojiPicker, {
     EmojiStyle,
     SkinTones,
@@ -18,7 +19,19 @@ import EmojiPicker, {
     SkinTonePickerLocation,
 } from "emoji-picker-react";
 // import { current } from "@reduxjs/toolkit";
-
+// const { publicKey, privateKey } = CryptoES.generateKeyPairSync("rsa", {
+//     modulusLength: 2048,
+//     publicKeyEncoding: {
+//         type: "spki",
+//         format: "pem",
+//     },
+//     privateKeyEncoding: {
+//         type: "pkcs8",
+//         format: "pem",
+//     },
+// });
+// console.log("Public Key:", publicKey);
+// console.log("Private Key:", privateKey);
 const Messenger = ({
     messages,
     currentUser,
@@ -33,9 +46,10 @@ const Messenger = ({
     // console.log(userChat);
     const [selectedEmoji, setSelectedEmoji] = useState("");
     const [openEmoji, setOpenEmoji] = useState(false);
+
     const handleAddNewMessage = async (e) => {
         e.preventDefault();
-        const thisMessage = {
+        let thisMessage = {
             text: newMessage,
             sender: currentUser._id,
             conversationId: currentChat._id,
@@ -49,7 +63,29 @@ const Messenger = ({
             text: newMessage,
         });
         try {
+            const ENCRYPT_KEY = "fcTowm3oX869xj8gt8Rg56RgIRmtpbsg";
+
+            const encryptedData = CryptoJS.AES.encrypt(
+                JSON.stringify(thisMessage.text),
+                ENCRYPT_KEY
+            ).toString();
+            thisMessage = {
+                ...thisMessage,
+                text: encryptedData,
+            };
             const res = await message.post("/", thisMessage);
+
+            const encryptedMessage = res.data.text;
+            const bytes = CryptoJS.AES.decrypt(encryptedMessage, ENCRYPT_KEY);
+            const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            // const bytes = CryptoJS.AES.decrypt(encryptedMessage, ENCRYPT_KEY);
+            // const data = bytes.toString(CryptoJS.enc.Utf8);
+            // console.log(data);
+            res.data = {
+                ...res.data,
+                text: decryptedData,
+            };
+            console.log(encryptedMessage);
             setMessages([...messages, res.data]);
             setNewMessage("");
         } catch (err) {
@@ -57,7 +93,7 @@ const Messenger = ({
         }
         // console.log(messages);
     };
-    console.log(currentChat);
+
     useEffect(() => {
         const getUser = async () => {
             const otherUser = currentChat.members.filter(

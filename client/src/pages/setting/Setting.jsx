@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect } from "react";
 import "./setting.scss";
-import axios from "axios";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
+import { useLocation } from "react-router-dom";
 import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { user } from "../../redux/axios/axios";
@@ -14,27 +12,54 @@ import "react-toastify/dist/ReactToastify.css";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
+import { useReducer } from "react";
+import ReactLoading from "react-loading";
 const Setting = () => {
     const currentUser = useSelector((state) => state.user.user);
+    const idPerson = useLocation().pathname.split("/")[2];
+    const [person, setPerson] = useState({});
     const { t } = useTranslation("setting");
     const dispatch = useDispatch();
     const initialValues = {
-        username: currentUser.username,
-        email: currentUser.email,
-        phone: currentUser.phone,
+        username: "",
+        email: "",
+        phone: "",
     };
+    const [loading, setLoading] = useState(true);
     const [values, setValues] = useState(initialValues);
     // const [formErrors, setFormErrors] = useState({
     //     username: "",
     //     email: "",
     //     phone: "",
     // });
-    const [file, setFile] = useState(currentUser.avatar);
+    const [file, setFile] = useState();
     const [showInput, setShowInput] = useState({
         username: false,
         email: false,
         phone: false,
     });
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await user.get("/find/" + idPerson);
+            setPerson(res.data);
+            if (currentUser._id !== idPerson) {
+                setValues(res.data);
+                setFile(res.data.avatar);
+            } else {
+                setValues({
+                    username: currentUser.username,
+                    email: currentUser.email,
+                    phone: currentUser.phone,
+                });
+                setFile(currentUser.avatar);
+            }
+            setLoading(false);
+        };
+        fetchUser();
+    }, [idPerson]);
+
+    console.log(values);
     const handleChange = (e) => {
         // console.log(showInput[e.target.name]);
         if (showInput[e.target.name]) {
@@ -120,14 +145,17 @@ const Setting = () => {
         // setFormErrors(validate(values));
         // console.log(values);
         try {
-            user.put(`/${currentUser._id}`, {
+            user.put(`/${idPerson}`, {
                 username: values.username,
                 email: values.email,
                 phone: values.phone,
                 avatar: file,
             }).then((res) => {
                 toast.success("Update Successfully!!", {});
-                dispatch(updateSuccess(res.data));
+                if (currentUser._id === idPerson) {
+                    dispatch(updateSuccess(res.data));
+                }
+                // dispatch(updateSuccess(res.data));
             });
         } catch (err) {
             console.log(err);
@@ -153,7 +181,11 @@ const Setting = () => {
     //     }
     //     return error;
     // };
-    return (
+    return loading ? (
+        <div className="loading">
+            <ReactLoading type="spokes" color="#a12727" />
+        </div>
+    ) : (
         <div className="setting">
             {/* <Sidebar />
             <div className="container">
@@ -185,9 +217,8 @@ const Setting = () => {
                         <div className="setting-field">
                             <div className="setting-info">
                                 {t("setting.Username")}:{" "}
-                                {showInput.username === false
-                                    ? values.username
-                                    : currentUser.username}
+                                {showInput.username === false &&
+                                    values.username}
                                 <div
                                     className="change-btn"
                                     onClick={() => showInputChange("username")}
@@ -218,9 +249,7 @@ const Setting = () => {
                         <div className="setting-field">
                             <div className="setting-info">
                                 {t("setting.Phone")}: {""}
-                                {showInput.phone === false
-                                    ? values.phone
-                                    : currentUser.phone}
+                                {showInput.phone === false && values.phone}
                                 <div
                                     className="change-btn"
                                     onClick={() => showInputChange("phone")}
@@ -251,9 +280,7 @@ const Setting = () => {
                         <div className="setting-field">
                             <div className="setting-info">
                                 {t("setting.Email")}:{" "}
-                                {showInput.email === false
-                                    ? values.email
-                                    : currentUser.email}
+                                {showInput.email === false && values.email}
                                 <div
                                     className="change-btn"
                                     onClick={() => showInputChange("email")}

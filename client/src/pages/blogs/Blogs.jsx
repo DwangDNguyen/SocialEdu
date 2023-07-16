@@ -8,20 +8,31 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useTranslation } from "react-i18next";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
     const currentUser = useSelector((state) => state.user.user);
     const [loading, setLoading] = useState(true);
+    const [hasMore, setHasMore] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
     const { t } = useTranslation("blog");
     useEffect(() => {
         const fetchPost = async () => {
-            const res = await post.get("/");
-            setBlogs(res.data);
+            const res = await post.get("/posts?page=" + currentPage);
+            setBlogs((prevPosts) => [...prevPosts, ...res.data]);
             setLoading(false);
         };
         fetchPost();
-    }, [currentUser._id]);
+    }, [currentUser._id, currentPage]);
     console.log(blogs);
+    const fetchMoreData = () => {
+        if (blogs.length < 18) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        } else {
+            setHasMore(false);
+        }
+    };
     return (
         <div className="blog">
             <span>{t("blog list.Learn new things and share knowledge")}</span>
@@ -32,11 +43,25 @@ const Blogs = () => {
                         <ReactLoading type="spokes" color="#a12727" />
                     </div>
                 ) : (
-                    <div className="list-blog">
-                        {blogs?.map((blog) => (
-                            <Blog key={blog._id} blog={blog} />
-                        ))}
-                    </div>
+                    <InfiniteScroll
+                        dataLength={blogs.length} //This is important field to render the next data
+                        next={fetchMoreData}
+                        hasMore={hasMore}
+                        loader={
+                            <div className="loading">
+                                <ReactLoading type="bubbles" color="#a12727" />
+                            </div>
+                        }
+
+                        // below props only if you need pull down functionality
+                        // refreshFunction={this.refresh}
+                    >
+                        <div className="list-blog">
+                            {blogs?.map((blog) => (
+                                <Blog key={blog._id} blog={blog} />
+                            ))}
+                        </div>
+                    </InfiniteScroll>
                 )}
             </div>
             <Link to="/blog/new">

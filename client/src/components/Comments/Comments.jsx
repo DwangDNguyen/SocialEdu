@@ -16,6 +16,7 @@ const Comments = ({ videoId }) => {
     const currentUser = useSelector((state) => state.user.user);
     const [comments, setComments] = useState([]);
     const [textComment, setTextComment] = useState({
+        id: "",
         desc: "",
         videoId: videoId,
     });
@@ -51,7 +52,11 @@ const Comments = ({ videoId }) => {
     };
     const handleEditCmt = async (value) => {
         try {
-            setTextComment({ desc: value.desc, videoId: value.videoId });
+            setTextComment({
+                desc: value.desc,
+                videoId: value.videoId,
+                id: value._id,
+            });
             setIsEditing(true);
         } catch (err) {
             console.log(err);
@@ -69,13 +74,13 @@ const Comments = ({ videoId }) => {
 
     const updateComment = async (e) => {
         e.preventDefault();
-        const { desc, videoId } = textComment;
+        const { id, desc, videoId } = textComment;
         if (desc.trim() === "") return;
         const thisCmt = await dispatch(editComment({ ...textComment }));
+        console.log(thisCmt);
+
         setComments(
-            comments.map((comment) =>
-                comment._id === thisCmt._id ? thisCmt : comment
-            )
+            comments.map((comment) => (comment._id === id ? thisCmt : comment))
         );
         setTextComment({ desc: "", videoId: videoId });
         setIsEditing(false);
@@ -88,7 +93,7 @@ const Comments = ({ videoId }) => {
                         <img
                             src={
                                 currentUser.avatar ||
-                                "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+                                "https://thumbs.dreamstime.com/b/test-icon-vector-question-mark-female-user-person-profile-avatar-symbol-help-sign-glyph-pictogram-illustration-test-168789128.jpg"
                             }
                         />
                     </div>

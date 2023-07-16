@@ -11,7 +11,8 @@ const RecommendVid = ({ tags }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await video.get(`/tags?tags=${tags}`);
+            // const res = await video.get(`/tags?tags=${tags}`);
+            const res = await video.get("/randomRecommendVideo");
             setRecommendVid(res.data);
         };
         fetchData();

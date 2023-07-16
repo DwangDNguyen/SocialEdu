@@ -8,6 +8,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import PaymentIcon from "@mui/icons-material/Payment";
 import SearchIcon from "@mui/icons-material/Search";
+import WhatshotIcon from "@mui/icons-material/Whatshot";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -77,6 +78,12 @@ const Sidebar = ({
                         <li>
                             <DashboardIcon className="icon" />
                             <span>{t("home.Home")}</span>
+                        </li>
+                    </Link>
+                    <Link to="/trending">
+                        <li>
+                            <WhatshotIcon className="icon" />
+                            <span>{t("home.Trending")}</span>
                         </li>
                     </Link>
                     {currentUser.isAdmin === true ? (

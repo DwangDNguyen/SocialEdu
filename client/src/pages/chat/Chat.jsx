@@ -21,6 +21,7 @@ const Chat = () => {
     const [loadingConversation, setLoadingConversation] = useState(true);
     // const [haveConversation, setHaveConversation] = useState(true);
     const [arrivalMessage, setArrivalMessage] = useState(null);
+
     const socket = useRef();
 
     useEffect(() => {
@@ -130,6 +131,7 @@ const Chat = () => {
                             <Conversation
                                 conversation={conversation}
                                 currentUser={currentUser}
+                                currentChat={currentChat}
                             />
                         </div>
                     ))

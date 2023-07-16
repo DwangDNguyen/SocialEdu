@@ -38,6 +38,8 @@ import CustomUser from "./pages/customUser/CustomUser";
 import CustomVideo from "./pages/customVideo/CustomVideo";
 import AdminUser from "./pages/adminUser/AdminUser";
 import AdminVideo from "./pages/adminVideo/AdminVideo";
+import Trending from "./pages/trending/Trending";
+import VerifyOTP from "./pages/verifyOTP/VerifyOTP";
 function App() {
     const { darkMode } = useContext(DarkModeContext);
     // const { currentUser } = useContext(AuthContext);
@@ -57,6 +59,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/verify" element={<VerifyOTP />} />
 
                     <Route
                         path="/"
@@ -64,6 +67,16 @@ function App() {
                             <PrivateRoute>
                                 <Layout>
                                     <Home />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/trending"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <Trending />
                                 </Layout>
                             </PrivateRoute>
                         }

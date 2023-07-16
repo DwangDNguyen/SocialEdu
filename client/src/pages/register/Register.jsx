@@ -4,8 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./register.scss";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../../redux/axios/axios";
-import { registerUser } from "../../helper/helper.js";
+import { auth, user } from "../../redux/axios/axios";
 
 const Register = () => {
     const initialValues = {
@@ -27,47 +26,47 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setValues(Object.assign(values, { avatar: file || "" }));
+        setValues(
+            Object.assign(values, {
+                avatar:
+                    file ||
+                    "https://thumbs.dreamstime.com/b/test-icon-vector-question-mark-female-user-person-profile-avatar-symbol-help-sign-glyph-pictogram-illustration-test-168789128.jpg",
+            })
+        );
         setFormErrors(validate(values));
         setIsSubmit(true);
 
         try {
             // const { data } = await auth.post("/register", values);
-            let registerPromise = registerUser(values);
-            toast.promise(registerPromise, {
-                success: "Register Successfully...!",
-                // error: "Register Failed...!. Username or Email already exists",
-                error: {
-                    render({ data }) {
-                        console.log(data);
-                        if (data.response.data.error) {
-                            return data.response.data.error;
-                        } else {
-                            return "Register Failed...!";
-                        }
-                    },
-                },
+            if (Object.keys(formErrors).length === 0 && isSubmit) {
+                // let registerPromise = registerUser(values);
+                // toast.promise(registerPromise, {
+                //     success: "Register Successfully...!",
+                //     // error: "Register Failed...!. Username or Email already exists",
+                //     error: {
+                //         render({ data }) {
+                //             console.log(data);
+                //             if (data.response.data.error) {
+                //                 return data.response.data.error;
+                //             } else {
+                //                 return "Register Failed...!";
+                //             }
+                //         },
+                //     },
 
-                theme: "dark",
-            });
-            // if (registerPromise)
-            //     toast.success("Register Successfully!!", {
-            //         autoClose: 4000,
-            //         onClose: () => {
-            //             setTimeout(() => {
-            //                 registerPromise.then(function () {
-            //                     navigate("/login");
-            //                 });
-            //             }, 5000);
-            //         },
-            //         theme: "dark",
-            //     });
+                //     theme: "dark",
+                // });
 
-            registerPromise.then(function () {
-                setTimeout(() => {
-                    navigate("/login");
-                }, 5000);
-            });
+                // registerPromise.then(function () {
+                //     setTimeout(() => {
+                //         navigate("/login");
+                //     }, 5000);
+                // });
+                localStorage.setItem("user", JSON.stringify(values));
+                await auth.post("/send-otp", { email: values.email });
+
+                navigate("/verify");
+            }
         } catch (err) {
             setError(true);
             if (err.response.data.error) {
@@ -81,6 +80,7 @@ const Register = () => {
             }
         }
     };
+    console.log(values);
     const handleChange = (e) => {
         const { name, value } = e.target;
         setValues({ ...values, [name]: value });
@@ -164,7 +164,7 @@ const Register = () => {
                             <img
                                 src={
                                     file ||
-                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRblGHmIA70kc9T4UJy-AFc0YLcnPpu5kwR2Q&usqp=CAU"
+                                    "https://thumbs.dreamstime.com/b/test-icon-vector-question-mark-female-user-person-profile-avatar-symbol-help-sign-glyph-pictogram-illustration-test-168789128.jpg"
                                 }
                             />
                         </label>

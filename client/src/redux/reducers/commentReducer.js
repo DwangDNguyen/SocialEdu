@@ -27,7 +27,7 @@ const commentReducer = (state = initialValue, action) => {
             return {
                 ...state,
                 comments: state.comments.map((comment) => {
-                    if (comment._id === action.payload._id) {
+                    if (comment._id === action.payload.id) {
                         return action.payload;
                     }
                     return comment;

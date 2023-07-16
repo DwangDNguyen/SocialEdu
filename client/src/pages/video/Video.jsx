@@ -62,6 +62,7 @@ const Video = () => {
             try {
                 setIsLoading(true);
                 const resVid = await video.get(`/find/${path}`);
+                await video.post("/watchedVideo", resVid.data);
                 const resChannel = await user.get(
                     `/find/${resVid.data.userId}`
                 );

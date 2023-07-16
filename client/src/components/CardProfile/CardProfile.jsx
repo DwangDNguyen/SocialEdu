@@ -60,7 +60,10 @@ const CardProfile = ({
                     <div className="block-option">
                         <div
                             className="block-option-item delete"
-                            onClick={() => setOpenModal(true)}
+                            onClick={() => {
+                                setOpenModal(true);
+                                setOpenBlock(false);
+                            }}
                         >
                             Delete
                         </div>
@@ -68,6 +71,7 @@ const CardProfile = ({
                             className="block-option-item edit"
                             onClick={() => {
                                 setOpen(true);
+                                setOpenBlock(false);
                             }}
                         >
                             Edit

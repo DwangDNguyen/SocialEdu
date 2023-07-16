@@ -32,6 +32,8 @@ const DataTable = ({ type }) => {
     const [page, setPage] = React.useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -82,6 +84,10 @@ const DataTable = ({ type }) => {
                 theme: "dark",
             });
         }
+    };
+    const handleEdit = (row) => {
+        setOpen(true);
+        setSelectedRow(row);
     };
     // const columns = [
     //     // {
@@ -256,8 +262,11 @@ const DataTable = ({ type }) => {
                                                         },
                                                 }}
                                             >
+                                                {console.log(row)}
                                                 {type === "user" ? (
-                                                    <>
+                                                    <React.Fragment
+                                                        key={row._id}
+                                                    >
                                                         <TableCell
                                                             component="th"
                                                             scope="row"
@@ -303,11 +312,24 @@ const DataTable = ({ type }) => {
                                                                 >
                                                                     Delete
                                                                 </div>
+                                                                <Link
+                                                                    to={`/setting/${row._id}`}
+                                                                    style={{
+                                                                        textDecoration:
+                                                                            "none",
+                                                                    }}
+                                                                >
+                                                                    <div className="editButton">
+                                                                        Edit
+                                                                    </div>
+                                                                </Link>
                                                             </div>
                                                         </TableCell>
-                                                    </>
+                                                    </React.Fragment>
                                                 ) : type === "video" ? (
-                                                    <>
+                                                    <React.Fragment
+                                                        key={row._id}
+                                                    >
                                                         <TableCell
                                                             component="th"
                                                             scope="row"
@@ -334,16 +356,16 @@ const DataTable = ({ type }) => {
                                                         </TableCell>
                                                         <TableCell align="center">
                                                             <div className="cellCustom">
-                                                                {/* <div
+                                                                <div
                                                                     className="viewButton"
                                                                     onClick={() =>
-                                                                        setOpen(
-                                                                            true
+                                                                        handleEdit(
+                                                                            row
                                                                         )
                                                                     }
                                                                 >
                                                                     Edit
-                                                                </div> */}
+                                                                </div>
                                                                 <div
                                                                     className="deleteButton"
                                                                     onClick={() =>
@@ -356,19 +378,19 @@ const DataTable = ({ type }) => {
                                                                 </div>
                                                             </div>
                                                         </TableCell>
-                                                        {/* {open && (
+                                                        {open && (
                                                             <Upload
                                                                 open={open}
                                                                 setOpen={
                                                                     setOpen
                                                                 }
                                                                 type="update"
-                                                                currentVideo={
-                                                                    row
+                                                                videoCurrent={
+                                                                    selectedRow
                                                                 }
                                                             />
-                                                        )} */}
-                                                    </>
+                                                        )}
+                                                    </React.Fragment>
                                                 ) : (
                                                     <></>
                                                 )}

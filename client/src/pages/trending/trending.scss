@@ -1,0 +1,30 @@
+.trending {
+    .trending-top {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        padding: 20px 50px;
+        gap: 20px;
+        & img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        & h1 {
+            font-size: 25px;
+        }
+    }
+    .list-trending {
+        margin-top: 20px;
+        // padding: 0 30px;
+        .infinite-scroll-component__outerdiv {
+            .infinite-scroll-component {
+                overflow: hidden !important;
+            }
+        }
+    }
+    .loading {
+        width: 100%;
+    }
+}

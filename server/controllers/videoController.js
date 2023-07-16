@@ -1,11 +1,32 @@
 import Video from "../models/video.js";
 import User from "../models/users.js";
+import ContentBasedRecommender from "content-based-recommender";
 export async function getVideo(req, res, next) {
     try {
         const video = await Video.findById(req.params.id);
+
+        // console.log(user.watchedVideos);
         res.status(200).json(video);
     } catch (err) {
         next(err);
+    }
+}
+export async function addWatchedVideo(req, res, next) {
+    try {
+        const user = await User.findById(req.user.userId);
+
+        const isVideoExists = user.watchedVideos?.some(
+            (video) => video._id === req.body._id
+        );
+
+        if (!isVideoExists) {
+            user.watchedVideos.push(req.body);
+            await user.save();
+        }
+        console.log(user);
+        res.status(200).json({ message: "Video watched successfully" });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to watch video" });
     }
 }
 export async function getVideoUser(req, res, next) {
@@ -61,6 +82,7 @@ export async function deleteVideo(req, res, next) {
 export async function randomVideo(req, res, next) {
     try {
         const videos = await Video.aggregate([{ $sample: { size: 15 } }]);
+        // console.log(req.user);
         res.status(200).json(videos);
     } catch (err) {
         next(err);
@@ -85,8 +107,28 @@ export async function randomVideo(req, res, next) {
 // }
 export async function randomRecommendVideo(req, res, next) {
     try {
-        const videos = await Video.aggregate([{ $sample: { size: 5 } }]);
-        res.status(200).json(videos);
+        const recommender = new ContentBasedRecommender();
+        const videos = await Video.find();
+        const transformedVideos = videos.map((video) => ({
+            id: video._id,
+            ...video,
+            content: video.title,
+        }));
+        const user = await User.findById(req.user.userId);
+        const watchedVideos = user.watchedVideos;
+        recommender.train(transformedVideos, "title");
+        const userWatchedTitles = [];
+        for (const video of watchedVideos) {
+            userWatchedTitles.push(video.title);
+        }
+        const recommendedVideos = recommender.getSimilarDocuments(
+            userWatchedTitles,
+            5
+        );
+        // const videos = await Video.aggregate([{ $sample: { size: 5 } }]);
+        console.log(recommendedVideos);
+
+        res.status(200).json(recommendedVideos);
     } catch (err) {
         next(err);
     }
@@ -175,6 +217,20 @@ export async function downloadVideo(req, res, next) {
         const video = await Video.findById(req.params.id);
         const path = `${process.cwd()}/uploads/${video.fileName}`;
         res.download(path);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function trendingVideo(req, res, next) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const videosPerPage = 5;
+        const startIndex = (page - 1) * videosPerPage;
+        const endIndex = page * videosPerPage;
+        const videos = await Video.find().sort({ views: -1 }).limit(30);
+        const paginatedVideos = videos.slice(startIndex, endIndex);
+        res.status(200).json(paginatedVideos);
     } catch (err) {
         next(err);
     }

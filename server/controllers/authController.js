@@ -1,6 +1,9 @@
 import User from "../models/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import otpGenerator from "otp-generator";
+import nodemailer from "nodemailer";
+import Mailgen from "mailgen";
 // const generateAccessToken = (user) => {
 //     return jwt.sign(
 //         { userId: user._id, email: user.email },
@@ -55,8 +58,15 @@ export async function verifyUser(req, res, next) {
 
 export async function register(req, res) {
     try {
-        const { username, email, avatar, password, phone, confirmPassword } =
-            req.body;
+        const {
+            username,
+            email,
+            avatar,
+            password,
+            phone,
+            confirmPassword,
+            otp,
+        } = req.body;
 
         const existUsername = new Promise((resolve, reject) => {
             User.findOne({ username }, function (err, user) {
@@ -86,7 +96,11 @@ export async function register(req, res) {
 
         Promise.all([existUsername, existEmail])
             .then(() => {
-                if (password && confirmPassword === password) {
+                if (
+                    password &&
+                    confirmPassword === password &&
+                    parseInt(req.app.locals.OTP) === parseInt(otp)
+                ) {
                     bcrypt
                         .hash(password, 10)
                         .then((hashedPassword) => {
@@ -158,6 +172,7 @@ export async function login(req, res, next) {
         // res.cookie("access_token", token, {
         //     httpOnly: true,
         //  })
+        console.log(req.user);
         return res
             .cookie("access_token", token, {
                 httpOnly: true,
@@ -173,5 +188,56 @@ export async function login(req, res, next) {
             });
     } catch (error) {
         next(error);
+    }
+}
+export async function generateOtp(req, res, next) {
+    try {
+        console.log(req.body.email);
+        req.app.locals.OTP = await otpGenerator.generate(6, {
+            lowerCaseAlphabets: false,
+            upperCaseAlphabets: false,
+            specialChars: false,
+        });
+        const transporter = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+        });
+        let MailGenerator = new Mailgen({
+            theme: "default",
+            product: {
+                name: "Generate OTP",
+                link: "https://mailgen.js/",
+            },
+        });
+        let response = {
+            body: {
+                intro: `Your OTP is ${req.app.locals.OTP}`,
+                name: req.body.email,
+            },
+        };
+        let mail = MailGenerator.generate(response);
+        let message = {
+            from: process.env.EMAIL,
+            to: req.body.email,
+            subject: "Generate OTP",
+            html: mail,
+        };
+
+        transporter
+            .sendMail(message)
+            .then(() => {
+                return res.status(200).json({
+                    message: "OTP sent successfully",
+                });
+            })
+            .catch((err) => {
+                return res.status(500).json({ err });
+            });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to send OTP" });
     }
 }

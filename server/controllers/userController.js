@@ -3,6 +3,7 @@ import Video from "../models/video.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
 export async function getUser(req, res) {
     const { id } = req.params;
     try {
@@ -41,7 +42,7 @@ export async function updateUser(req, res, next) {
     //     return res.status(401).send({ err });
     // }
     console.log(req.user);
-    if (req.params.id === req.user.userId) {
+    if (req.params.id === req.user.userId || req.user.isAdmin) {
         try {
             const updatedUser = await User.findByIdAndUpdate(
                 req.params.id,
@@ -140,7 +141,7 @@ export const dislike = async (req, res, next) => {
 export const getAllUser = async (req, res, next) => {
     try {
         // const users = await User.find({ isAdmin: { $ne: true } });
-        const users = await User.find({});
+        const users = await User.find({ isAdmin: { $ne: true } });
         res.status(200).json(users);
     } catch (err) {
         next(err);
@@ -177,3 +178,5 @@ export const deleteUser = async (req, res, next) => {
         next(err);
     }
 };
+
+

@@ -45,10 +45,17 @@ export const verifyToken = (req, res, next) => {
 
 export const isAdmin = (req, res, next) => {
     verifyToken(req, res, () => {
-        if (req.user.isAdmin) {
+        if (req.user.isAdmin || req.user.id === req.params.id) {
             next();
         } else {
             res.status(403).json("You are not an admin!");
         }
     });
 };
+
+export function localVariables(req, res, next) {
+    req.app.locals = {
+        OTP: null,
+    };
+    next();
+}

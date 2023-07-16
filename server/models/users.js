@@ -37,6 +37,9 @@ const UsersSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        watchedVideos: {
+            type: Array,
+        },
     },
     { timestamps: true }
 );

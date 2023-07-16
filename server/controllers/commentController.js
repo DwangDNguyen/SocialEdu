@@ -40,15 +40,15 @@ export const updateComment = async (req, res, next) => {
         const thisComment = await Comment.findById(req.params.id);
         if (!thisComment) return res.status(404).json("thisComment not found");
         if (req.user.userId === thisComment.userId || req.user.isAdmin) {
-            const updatedVideo = await Video.findByIdAndUpdate(
+            const updatedComment = await Comment.findByIdAndUpdate(
                 req.params.id,
                 { $set: req.body },
                 { new: true }
             );
-            res.status(200).json(updatedVideo);
+            res.status(200).json(updatedComment);
         }
 
-        res.status(200).json(updatedComment);
+        // res.status(200).json(updatedComment);
     } catch (err) {
         next(err);
     }

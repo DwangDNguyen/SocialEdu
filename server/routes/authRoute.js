@@ -8,7 +8,7 @@ import {
     verifyUser,
     register,
     login,
-    
+    generateOtp,
 } from "../controllers/authController.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -17,6 +17,7 @@ router.post("/register", register);
 
 //login
 router.post("/login", verifyUser, login);
+router.post("/send-otp", generateOtp);
 
 //refreshToken
 // router.post("/refreshToken", refreshToken);

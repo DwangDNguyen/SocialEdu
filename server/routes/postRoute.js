@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/", verifyToken, addPost);
 router.delete("/:id", verifyToken, deletePost);
 router.get("/find/:id", getPost);
-router.get("/", getRandomPosts);
+router.get("/posts", getRandomPosts);
 router.get("/suggestedPosts", getSuggestedPosts);
 router.put("/update/:id", verifyToken, updatePost);
 router.get("/listPost/:id", getUserPost);

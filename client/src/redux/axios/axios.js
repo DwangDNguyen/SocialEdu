@@ -78,9 +78,21 @@ comment.interceptors.request.use(
 export const conversation = axios.create({
     baseURL: "http://localhost:5000/api/conversation",
 });
+
 export const message = axios.create({
     baseURL: "http://localhost:5000/api/message",
 });
+message.interceptors.request.use(
+    (config) => {
+        const token = Cookies.get("token");
+        config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 export const post = axios.create({
     baseURL: "http://localhost:5000/api/post",
     headers: {

@@ -83,7 +83,7 @@ const Chat = () => {
         };
         getMessage();
     }, [currentChat]);
-    // console.log(messages);
+    console.log(messages);
 
     // console.log(currentChat);
     return (

@@ -7,7 +7,10 @@ import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ReactLoading from "react-loading";
 import { user, message } from "../../redux/axios/axios";
 import { io } from "socket.io-client";
+
 import CryptoJS from "crypto-js";
+import JSEncrypt from "jsencrypt";
+
 import EmojiPicker, {
     EmojiStyle,
     SkinTones,
@@ -46,7 +49,35 @@ const Messenger = ({
     // console.log(userChat);
     const [selectedEmoji, setSelectedEmoji] = useState("");
     const [openEmoji, setOpenEmoji] = useState(false);
+    const [receiverUser, setReceiverUser] = useState({});
+    const [publicKey, setPublicKey] = useState("");
+    useEffect(() => {
+        const getUser = async () => {
+            const otherUser = currentChat.members.filter(
+                (member) => member !== currentUser._id
+            );
 
+            // console.log(otherUser);
+            const res = await user.get("/find/" + otherUser[0]);
+            setUserChat(res.data);
+        };
+        getUser();
+    }, [currentChat, currentUser._id, messages]);
+    useEffect(() => {
+        const receiverId = currentChat.members.find(
+            (member) => member !== currentUser._id
+        );
+        const handleKey = async () => {
+            const reskey = await message.get("/publickey/" + receiverId);
+            const regex =
+                /-----BEGIN PUBLIC KEY-----([\s\S]*)-----END PUBLIC KEY-----/;
+            const match = reskey.data.match(regex);
+            // setPublicKey(match[1].trim());
+            setPublicKey(reskey.data);
+            console.log(publicKey);
+        };
+        handleKey();
+    }, [currentChat, currentUser._id, publicKey]);
     const handleAddNewMessage = async (e) => {
         e.preventDefault();
         let thisMessage = {
@@ -63,30 +94,53 @@ const Messenger = ({
             text: newMessage,
         });
         try {
-            const ENCRYPT_KEY = "fcTowm3oX869xj8gt8Rg56RgIRmtpbsg";
+            // const pubkey = await fetch(
+            //     `./certificate/${receiverUser.username}_public.pem`
+            // );
+            // setPublicKey(pubkey.text());
 
-            const encryptedData = CryptoJS.AES.encrypt(
-                JSON.stringify(thisMessage.text),
-                ENCRYPT_KEY
-            ).toString();
+            // const encryptedData = CryptoJS.AES.encrypt(
+            //     JSON.stringify(thisMessage.text),
+            //     publicKey
+            // ).toString();
+            // const encryptedData = CryptoJS.AES.encrypt(
+            //     CryptoJS.enc.Utf8.parse(thisMessage.text),
+            //     publicKey,
+            //     {
+            //         padding: CryptoJS.pad.NoPadding,
+            //         mode: CryptoJS.mode.ECB,
+            //     }
+            // ).toString();
+            // const encJson = CryptoJS.AES.encrypt(JSON.stringify(thisMessage.text), publicKey).toString();
+            // const encryptedData = CryptoJS.enc.Base64.stringify(
+            //         CryptoJS.enc.Utf8.parse(encJson)
+            // );
+
+            const encrypt = new JSEncrypt();
+            encrypt.setPublicKey(publicKey);
+            const encryptedData = encrypt.encrypt(thisMessage.text);
+
+            // const encryptedData = crypto
+            //     .publicEncrypt(
+            //         {
+            //             key: publicKey,
+            //             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            //             oaepHash: "sha256",
+            //         },
+            //         Buffer.from(message)
+            //     )
+            //     .toString("base64");
+
             thisMessage = {
                 ...thisMessage,
-                text: encryptedData,
+                receiverId: receiverId,
             };
-            const res = await message.post("/", thisMessage);
+            const res = await message.post("/", {
+                ...thisMessage,
+                // text: encryptedData,
+            });
 
-            const encryptedMessage = res.data.text;
-            const bytes = CryptoJS.AES.decrypt(encryptedMessage, ENCRYPT_KEY);
-            const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-            // const bytes = CryptoJS.AES.decrypt(encryptedMessage, ENCRYPT_KEY);
-            // const data = bytes.toString(CryptoJS.enc.Utf8);
-            // console.log(data);
-            res.data = {
-                ...res.data,
-                text: decryptedData,
-            };
-            console.log(encryptedMessage);
-            setMessages([...messages, res.data]);
+            setMessages([...messages, thisMessage]);
             setNewMessage("");
         } catch (err) {
             console.log(err);
@@ -94,19 +148,7 @@ const Messenger = ({
         // console.log(messages);
     };
 
-    useEffect(() => {
-        const getUser = async () => {
-            const otherUser = currentChat.members.filter(
-                (member) => member !== currentUser._id
-            );
-
-            // console.log(otherUser);
-            const res = await user.get("/find/" + otherUser[0]);
-            setUserChat(res.data);
-        };
-        getUser();
-    }, [currentChat, currentUser._id, messages]);
-    // console.log(userChat);
+    console.log(publicKey);
     useEffect(() => {
         messageRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
@@ -115,6 +157,7 @@ const Messenger = ({
         message += emojiObject.emoji;
         setNewMessage(message);
     };
+
     return (
         <div className="messenger">
             <div className="messenger-header">

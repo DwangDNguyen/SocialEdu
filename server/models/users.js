@@ -40,6 +40,9 @@ const UsersSchema = new mongoose.Schema(
         watchedVideos: {
             type: Array,
         },
+        publicKey: {
+            type: String,
+        },
     },
     { timestamps: true }
 );

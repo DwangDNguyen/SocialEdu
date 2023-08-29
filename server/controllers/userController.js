@@ -2,7 +2,7 @@ import User from "../models/users.js";
 import Video from "../models/video.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import fs from "fs";
 
 export async function getUser(req, res) {
     const { id } = req.params;
@@ -44,12 +44,22 @@ export async function updateUser(req, res, next) {
     console.log(req.user);
     if (req.params.id === req.user.userId || req.user.isAdmin) {
         try {
+            const currentUser = await User.findById(req.user.userId);
+            console.log(currentUser);
             const updatedUser = await User.findByIdAndUpdate(
                 req.params.id,
                 {
                     $set: req.body,
                 },
                 { new: true }
+            );
+            fs.renameSync(
+                `./certificate/${currentUser.username}_public.pem`,
+                `./certificate/${updatedUser.username}_public.pem`
+            );
+            fs.renameSync(
+                `./certificate/${currentUser.username}_private.pem`,
+                `./certificate/${updatedUser.username}_private.pem`
             );
             res.status(200).json(updatedUser);
         } catch (err) {
@@ -178,5 +188,3 @@ export const deleteUser = async (req, res, next) => {
         next(err);
     }
 };
-
-

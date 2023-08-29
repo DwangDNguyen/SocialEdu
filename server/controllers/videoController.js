@@ -23,7 +23,7 @@ export async function addWatchedVideo(req, res, next) {
             user.watchedVideos.push(req.body);
             await user.save();
         }
-        console.log(user);
+        // console.log(user);
         res.status(200).json({ message: "Video watched successfully" });
     } catch (error) {
         res.status(500).json({ error: "Failed to watch video" });
@@ -116,15 +116,20 @@ export async function randomRecommendVideo(req, res, next) {
         }));
         const user = await User.findById(req.user.userId);
         const watchedVideos = user.watchedVideos;
-        recommender.train(transformedVideos, "title");
-        const userWatchedTitles = [];
-        for (const video of watchedVideos) {
-            userWatchedTitles.push(video.title);
-        }
+        const watchedVidTransform = watchedVideos.map((video) => ({
+            id: video._id,
+            ...video,
+            content: video.title,
+        }));
+        recommender.train(transformedVideos, { fields: ["title", "tags"] });
+        const watchedVideoTitles = watchedVidTransform.map(
+            (video) => video.title
+        );
         const recommendedVideos = recommender.getSimilarDocuments(
-            userWatchedTitles,
+            watchedVideoTitles,
             5
         );
+
         // const videos = await Video.aggregate([{ $sample: { size: 5 } }]);
         console.log(recommendedVideos);
 

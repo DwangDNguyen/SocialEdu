@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import otpGenerator from "otp-generator";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
+import { generateKeyPairSync } from "crypto";
+import fs from "fs";
 // const generateAccessToken = (user) => {
 //     return jwt.sign(
 //         { userId: user._id, email: user.email },
@@ -101,6 +103,25 @@ export async function register(req, res) {
                     confirmPassword === password &&
                     parseInt(req.app.locals.OTP) === parseInt(otp)
                 ) {
+                    const { publicKey, privateKey } = generateKeyPairSync(
+                        "rsa",
+                        {
+                            modulusLength: 2048,
+                        }
+                    );
+
+                    // Save keys to files
+                    const publicKeyPath = `./certificate/${username}_public.pem`;
+                    const privateKeyPath = `./certificate/${username}_private.pem`;
+
+                    fs.writeFileSync(
+                        publicKeyPath,
+                        publicKey.export({ type: "spki", format: "pem" })
+                    );
+                    fs.writeFileSync(
+                        privateKeyPath,
+                        privateKey.export({ type: "pkcs8", format: "pem" })
+                    );
                     bcrypt
                         .hash(password, 10)
                         .then((hashedPassword) => {

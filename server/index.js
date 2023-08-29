@@ -2,6 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import https from "https";
+import fs from "fs";
+import path from "path";
+import { generateKeyPairSync } from "crypto";
 import eventRoutes from "./routes/eventsRoute.js";
 import userRoutes from "./routes/userRoute.js";
 import authRoutes from "./routes/authRoute.js";
@@ -17,6 +21,26 @@ import cors from "cors";
 const app = express();
 dotenv.config();
 mongoose.set("strictQuery", true);
+
+// const sslServer = https.createServer(
+//     {
+//         key: fs.readFileSync("./certificate/key.pem"),
+//         cert: fs.readFileSync("./certificate/cert.pem"),
+//     },
+//     app
+// );
+// const { publicKey, privateKey } = generateKeyPairSync("rsa", {
+//     modulusLength: 4096,
+//     publicKeyEncoding: {
+//         type: "spki",
+//         format: "pem",
+//     },
+//     privateKeyEncoding: {
+//         type: "pkcs8",
+//         format: "pem",
+//     },
+// });
+
 const connect = () => {
     mongoose
         .connect(process.env.MONGO)

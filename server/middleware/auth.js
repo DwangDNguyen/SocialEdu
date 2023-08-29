@@ -13,25 +13,25 @@ import jwt from "jsonwebtoken";
 export const verifyToken = (req, res, next) => {
     // const token = req.cookies.access_token;
 
-    const token = req.headers.authorization.split(" ")[1];
     // console.log(req.cookies.access_token);
     // console.log(req.headers.authorization);
     // console.log(token);
+    const token = req.headers.authorization.split(" ")[1];
     if (!token) return next(res.status(401).json("You are not authenticated!"));
     try {
         // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
             if (err) return next(res.status(403).json("Token is not valid!"));
-            const currentTime = Math.floor(Date.now() / 1000);
-            if (user.exp < currentTime) {
-                console.log("Token has expired");
-            } else {
-                console.log(
-                    `Token is still valid, will expire in ${
-                        user.exp - currentTime
-                    } seconds`
-                );
-            }
+            // const currentTime = Math.floor(Date.now() / 1000);
+            // if (user.exp < currentTime) {
+            //     console.log("Token has expired");
+            // } else {
+            //     console.log(
+            //         `Token is still valid, will expire in ${
+            //             user.exp - currentTime
+            //         } seconds`
+            //     );
+            // }
             req.user = user;
             next();
         });

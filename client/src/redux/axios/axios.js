@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 // console.log(token);
 
 export const event = axios.create({
-    baseURL: "http://localhost:5000/api/events",
+    baseURL: "https://social-website-study-api.vercel.app/api/events",
     headers: {
         "Content-Type": "application/json",
     },
@@ -21,11 +21,11 @@ event.interceptors.request.use(
 );
 
 export const auth = axios.create({
-    baseURL: "http://localhost:5000/api/auth",
+    baseURL: "https://social-website-study-api.vercel.app/api/auth",
 });
 
 export const user = axios.create({
-    baseURL: "http://localhost:5000/api/user",
+    baseURL: "https://social-website-study-api.vercel.app/api/user",
     headers: {
         "Content-Type": "application/json",
     },
@@ -42,7 +42,7 @@ user.interceptors.request.use(
 );
 
 export const video = axios.create({
-    baseURL: "http://localhost:5000/api/video",
+    baseURL: "https://social-website-study-api.vercel.app/api/video",
     headers: {
         "Content-Type": "application/json",
     },
@@ -59,7 +59,7 @@ video.interceptors.request.use(
 );
 
 export const comment = axios.create({
-    baseURL: "http://localhost:5000/api/comment",
+    baseURL: "https://social-website-study-api.vercel.app/api/comment",
     headers: {
         "Content-Type": "application/json",
     },
@@ -76,11 +76,11 @@ comment.interceptors.request.use(
 );
 
 export const conversation = axios.create({
-    baseURL: "http://localhost:5000/api/conversation",
+    baseURL: "https://social-website-study-api.vercel.app/api/conversation",
 });
 
 export const message = axios.create({
-    baseURL: "http://localhost:5000/api/message",
+    baseURL: "https://social-website-study-api.vercel.app/api/message",
 });
 message.interceptors.request.use(
     (config) => {
@@ -94,7 +94,7 @@ message.interceptors.request.use(
 );
 
 export const post = axios.create({
-    baseURL: "http://localhost:5000/api/post",
+    baseURL: "https://social-website-study-api.vercel.app/api/post",
     headers: {
         "Content-Type": "application/json",
     },
@@ -111,7 +111,7 @@ post.interceptors.request.use(
 );
 
 export const notification = axios.create({
-    baseURL: "http://localhost:5000/api/notification",
+    baseURL: "https://social-website-study-api.vercel.app/api/notification",
     headers: {
         "Content-Type": "application/json",
     },

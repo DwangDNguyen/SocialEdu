@@ -1,24 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./home.scss";
 import ReactLoading from "react-loading";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
-import Widget from "../../components/widget/Widget";
-import Featured from "../../components/Featured/Featured";
-import Chart from "../../components/Chart/Chart";
-import TableList from "../../components/TableList/TableList";
+
 import ListVideos from "../../components/ListVideos/ListVideos";
 import { video } from "../../redux/axios/axios";
-import { useDispatch, useSelector } from "react-redux";
-import { io } from "socket.io-client";
-import { setSocket } from "../../redux/reducers/socketSlice";
+import { useSelector } from "react-redux";
+
 const Home = () => {
     const [videos, setVideos] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(true);
     const currentUser = useSelector((state) => state.user.user);
-    const dispatch = useDispatch();
-    const socket = useRef();
+    // const dispatch = useDispatch();
+    // const socket = useRef();
     useEffect(() => {
         const fetchVideo = async () => {
             setIsLoading(true);

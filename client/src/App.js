@@ -1,11 +1,5 @@
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Navigate,
-    useNavigate,
-} from "react-router-dom";
-import React, { useRef } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
 import List from "./pages/list/List";
@@ -13,21 +7,21 @@ import SinglePage from "./pages/singlePage/SinglePage";
 import New from "./pages/new/New";
 import { userInputs, productInputs } from "./formInput";
 import "./style/dark.scss";
-import { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
-import { AuthContext } from "./context/AuthContext";
+// import { AuthContext } from "./context/AuthContext";
 import AddEvent from "./pages/addEvent/AddEvent";
 import MyCalendar from "./pages/myCalendar/MyCalendar";
 import UpdateEvent from "./pages/updateEvent/UpdateEvent";
 import Video from "./pages/video/Video";
 import Register from "./pages/register/Register";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import Profile from "./pages/profile/Profile";
 import Setting from "./pages/setting/Setting";
 import Channel from "./pages/channel/Channel";
 import Chat from "./pages/chat/Chat";
 import PrivateRoute from "./PrivateRoute";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import Layout from "./components/Layout/Layout";
 import Search from "./pages/search/Search";
 import Blogs from "./pages/blogs/Blogs";
@@ -40,6 +34,8 @@ import AdminUser from "./pages/adminUser/AdminUser";
 import AdminVideo from "./pages/adminVideo/AdminVideo";
 import Trending from "./pages/trending/Trending";
 import VerifyOTP from "./pages/verifyOTP/VerifyOTP";
+import Chatbot from "./pages/chatbot/Chatbot";
+
 function App() {
     const { darkMode } = useContext(DarkModeContext);
     // const { currentUser } = useContext(AuthContext);
@@ -311,6 +307,19 @@ function App() {
                             </PrivateRoute>
                         }
                     />
+
+                    <Route
+                        path="/chatbot"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <Chatbot />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+
+                    {/* admin */}
                     <Route
                         path="/admin/list"
                         element={

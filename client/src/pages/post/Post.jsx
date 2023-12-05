@@ -28,7 +28,7 @@ const Post = () => {
         const fetchPost = async () => {
             const res = await post.get(`/find/${path}`);
             const resChannel = await user.get(`/find/${res.data.userId}`);
-            const resSuggestPosts = await post.get("/suggestedPosts");
+            const resSuggestPosts = await post.get("/suggestedPosts/" + path);
             setSuggestedPosts(resSuggestPosts.data);
             setChannel(resChannel.data);
             setCurrentPost(res.data);

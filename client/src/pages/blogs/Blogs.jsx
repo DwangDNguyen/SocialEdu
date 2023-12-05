@@ -44,7 +44,7 @@ const Blogs = () => {
                     </div>
                 ) : (
                     <InfiniteScroll
-                        dataLength={blogs.length} //This is important field to render the next data
+                        dataLength={blogs.length}
                         next={fetchMoreData}
                         hasMore={hasMore}
                         loader={
@@ -52,9 +52,6 @@ const Blogs = () => {
                                 <ReactLoading type="bubbles" color="#a12727" />
                             </div>
                         }
-
-                        // below props only if you need pull down functionality
-                        // refreshFunction={this.refresh}
                     >
                         <div className="list-blog">
                             {blogs?.map((blog) => (

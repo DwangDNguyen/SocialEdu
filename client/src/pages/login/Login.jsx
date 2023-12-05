@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./login.scss";
 // import EmailIcon from "@mui/icons-material/Email";
+import ReactLoading from "react-loading";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -25,6 +26,7 @@ const Login = () => {
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
     const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
     // const [showingAlert, setShowingAlert] = useState(false);
     const dispatch = useDispatch();
     // const { dispatch } = useContext(AuthContext);
@@ -44,6 +46,7 @@ const Login = () => {
         //         setError(true);
         //     });
         try {
+            setLoading(true);
             const res = await auth.post("/login", {
                 email,
                 password,
@@ -59,12 +62,15 @@ const Login = () => {
                 },
                 theme: "dark",
             });
-            let { token } = res.data;
+            let { token, refresh_token } = res.data;
             // localStorage.setItem("token", token);
             Cookies.set("token", token);
+            Cookies.set("refresh_token", refresh_token);
+            setLoading(false);
         } catch (err) {
             setError(true);
             dispatch(loginFailure());
+            setLoading(false);
         }
     };
     const handleChange = (e) => {
@@ -106,7 +112,7 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="login-form-input">
                         <input
-                            type="email"
+                            type="text"
                             name="email"
                             id="email"
                             value={values.email}
@@ -134,9 +140,17 @@ const Login = () => {
                         <span></span>
                         <span></span>
                         <span></span>
-                        Login
+                        {loading ? "Wait..." : "Login"}
                     </button>
                 </form>
+                <div className="transfer-resetpassword">
+                    <span
+                        onClick={() => navigate("/verify?type=verifyEmail")}
+                        className="transfer-resetpassword-text"
+                    >
+                        Forgot your password?
+                    </span>
+                </div>
                 <div className="transfer-register">
                     <span className="transfer-register-text">
                         Create a new account?

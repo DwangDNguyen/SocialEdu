@@ -21,7 +21,23 @@
             text-align: center;
             color: var(--clr-white) !important;
         }
-
+        .form-input {
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            background: transparent;
+            padding: 15px 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--clr-white) !important;
+            &:focus::placeholder {
+                color: transparent;
+            }
+        }
+        .error {
+            font-size: 12px;
+            color: red;
+        }
         & h2 {
             font-size: 14px;
             display: flex;

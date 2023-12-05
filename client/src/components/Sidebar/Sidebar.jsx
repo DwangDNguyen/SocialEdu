@@ -40,13 +40,14 @@ const Sidebar = ({
     // console.log(currentUser.avatar);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const handleLogin = () => {
-        navigate("/login");
-    };
+    // const handleLogin = () => {
+    //     navigate("/login");
+    // };
     const handleLogout = () => {
         dispatch(logout());
         navigate("/login");
-        Cookies.set("token", null);
+        Cookies.remove("token");
+        Cookies.remove("refresh_token");
 
         // dispatch({
         //     type: "LOGOUT",
@@ -129,6 +130,12 @@ const Sidebar = ({
                         <li>
                             <BookIcon className="icon" />
                             <span>{t("home.Blog")}</span>
+                        </li>
+                    </Link>
+                    <Link to="/chatbot">
+                        <li>
+                            <WhatshotIcon className="icon" />
+                            <span>{t("home.Chatbot")}</span>
                         </li>
                     </Link>
                     <div className="title service">{t("home.Service")}</div>

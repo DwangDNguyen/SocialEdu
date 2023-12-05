@@ -69,36 +69,55 @@ const Upload = ({ setOpen, type, videoCurrent }) => {
         console.log({ ...inputs, tags, ImgUrl });
 
         if (type === "upload") {
-            const res = await video.post("/", {
-                ...inputs,
-                tags,
-                ImgUrl,
-            });
+            try {
+                const res = await video.post("/", {
+                    ...inputs,
+                    tags,
+                    ImgUrl,
+                });
 
-            if (window.location.pathname === `/profile/${currentUser._id}`) {
-                res.status === 200 &&
-                    window.location.reload() &&
-                    setOpen(false);
-            } else {
-                res.status === 200 &&
-                    navigate(`/profile/${currentUser._id}`) &&
-                    setOpen(false);
+                if (
+                    window.location.pathname === `/profile/${currentUser._id}`
+                ) {
+                    res.status === 200 &&
+                        window.location.reload() &&
+                        setOpen(false);
+                } else {
+                    res.status === 200 &&
+                        navigate(`/profile/${currentUser._id}`) &&
+                        setOpen(false) &&
+                        toast.success("Video Uploaded Successfully!!", {
+                            autoClose: 3000,
+                            theme: "dark",
+                        });
+                }
+                setOpen(false);
+            } catch (err) {
+                toast.error("Video Upload Failed", {
+                    autoClose: 3000,
+                    theme: "dark",
+                });
             }
-            setOpen(false);
         } else if (type === "update") {
-            console.log(type);
-            await video.put(`/update/${videoCurrent._id}`, {
-                ...inputs,
-                tags,
-                ImgUrl,
-            });
-            toast.success("Video Updated Successfully!!", {
-                autoClose: 3000,
-                onClose: () => {
-                    window.location.reload() && setOpen(false);
-                },
-                theme: "dark",
-            });
+            try {
+                await video.put(`/update/${videoCurrent._id}`, {
+                    ...inputs,
+                    tags,
+                    ImgUrl,
+                });
+                toast.success("Video Updated Successfully!!", {
+                    autoClose: 3000,
+                    onClose: () => {
+                        window.location.reload() && setOpen(false);
+                    },
+                    theme: "dark",
+                });
+            } catch (err) {
+                toast.error("Video Update Failed", {
+                    autoClose: 3000,
+                    theme: "dark",
+                });
+            }
         }
         // setOpen(false);
     };
@@ -122,14 +141,14 @@ const Upload = ({ setOpen, type, videoCurrent }) => {
                     onChange={onUploadVid}
                     name="videoUrl"
                 />
-                {/* <label>Or</label> */}
-                {/* <input
+                <label>Or</label>
+                <input
                     type="text"
                     placeholder="videoUrl"
                     name="videoUrl"
                     onChange={handleChange}
                     value={inputs?.videoUrl}
-                /> */}
+                />
                 <input
                     type="text"
                     placeholder="Title"

@@ -216,5 +216,18 @@
                 color: var(--clr-red-dark);
             }
         }
+        .transfer-resetpassword {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 10px;
+            .transfer-resetpassword-text {
+                font-size: 12px;
+                margin-right: 5px;
+                color: var(--clr-white);
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
     }
 }

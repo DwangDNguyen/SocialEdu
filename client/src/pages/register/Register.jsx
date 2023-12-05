@@ -63,9 +63,10 @@ const Register = () => {
                 //     }, 5000);
                 // });
                 localStorage.setItem("user", JSON.stringify(values));
+                console.log(values.email);
                 await auth.post("/send-otp", { email: values.email });
 
-                navigate("/verify");
+                navigate("/verify?type=verifyRegister");
             }
         } catch (err) {
             setError(true);

@@ -47,10 +47,10 @@ const Messenger = ({
     const [newMessage, setNewMessage] = useState("");
     const messageRef = useRef();
     // console.log(userChat);
-    const [selectedEmoji, setSelectedEmoji] = useState("");
+    // const [selectedEmoji, setSelectedEmoji] = useState("");
     const [openEmoji, setOpenEmoji] = useState(false);
-    const [receiverUser, setReceiverUser] = useState({});
-    const [publicKey, setPublicKey] = useState("");
+    // const [receiverUser, setReceiverUser] = useState({});
+    // const [publicKey, setPublicKey] = useState("");
     useEffect(() => {
         const getUser = async () => {
             const otherUser = currentChat.members.filter(
@@ -63,21 +63,21 @@ const Messenger = ({
         };
         getUser();
     }, [currentChat, currentUser._id, messages]);
-    useEffect(() => {
-        const receiverId = currentChat.members.find(
-            (member) => member !== currentUser._id
-        );
-        const handleKey = async () => {
-            const reskey = await message.get("/publickey/" + receiverId);
-            const regex =
-                /-----BEGIN PUBLIC KEY-----([\s\S]*)-----END PUBLIC KEY-----/;
-            const match = reskey.data.match(regex);
-            // setPublicKey(match[1].trim());
-            setPublicKey(reskey.data);
-            console.log(publicKey);
-        };
-        handleKey();
-    }, [currentChat, currentUser._id, publicKey]);
+    // useEffect(() => {
+    //     const receiverId = currentChat.members.find(
+    //         (member) => member !== currentUser._id
+    //     );
+    //     const handleKey = async () => {
+    //         const reskey = await message.get("/publickey/" + receiverId);
+    //         const regex =
+    //             /-----BEGIN PUBLIC KEY-----([\s\S]*)-----END PUBLIC KEY-----/;
+    //         const match = reskey.data.match(regex);
+    //         // setPublicKey(match[1].trim());
+    //         setPublicKey(reskey.data);
+    //         console.log(publicKey);
+    //     };
+    //     handleKey();
+    // }, [currentChat, currentUser._id, publicKey]);
     const handleAddNewMessage = async (e) => {
         e.preventDefault();
         let thisMessage = {
@@ -116,9 +116,9 @@ const Messenger = ({
             //         CryptoJS.enc.Utf8.parse(encJson)
             // );
 
-            const encrypt = new JSEncrypt();
-            encrypt.setPublicKey(publicKey);
-            const encryptedData = encrypt.encrypt(thisMessage.text);
+            // const encrypt = new JSEncrypt();
+            // encrypt.setPublicKey(publicKey);
+            // const encryptedData = encrypt.encrypt(thisMessage.text);
 
             // const encryptedData = crypto
             //     .publicEncrypt(
@@ -148,7 +148,7 @@ const Messenger = ({
         // console.log(messages);
     };
 
-    console.log(publicKey);
+    // console.log(publicKey);
     useEffect(() => {
         messageRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);

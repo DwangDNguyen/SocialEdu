@@ -18,10 +18,11 @@ import {
     updateVideo,
     trendingVideo,
     addWatchedVideo,
+    deleteAllWatchedVideo,
 } from "../controllers/videoController.js";
 import { isAdmin, verifyToken } from "../middleware/auth.js";
 router.post("/", verifyToken, addVideo);
-router.get("/randomVideo", randomVideo);
+router.get("/randomVideo", verifyToken, randomVideo);
 router.get("/randomRecommendVideo", verifyToken, randomRecommendVideo);
 router.post("/watchedVideo", verifyToken, addWatchedVideo);
 // router.get("/randomMoreVideos", randomMoreVideo);
@@ -38,5 +39,6 @@ router.get("/getAllVideos", getAllVideos);
 router.get("/getVideosMostViewed", getVideosMostViewed);
 router.get("/getVideosNewest", getVideosNewest);
 router.get("/getTrending", trendingVideo);
+router.put("/deleteAllWatchedVideo", verifyToken, deleteAllWatchedVideo);
 
 export default router;

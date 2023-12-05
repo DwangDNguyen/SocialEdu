@@ -16,7 +16,7 @@ router.post("/", verifyToken, addPost);
 router.delete("/:id", verifyToken, deletePost);
 router.get("/find/:id", getPost);
 router.get("/posts", getRandomPosts);
-router.get("/suggestedPosts", getSuggestedPosts);
+router.get("/suggestedPosts/:id", getSuggestedPosts);
 router.put("/update/:id", verifyToken, updatePost);
 router.get("/listPost/:id", getUserPost);
 router.get("/search", searchPost);

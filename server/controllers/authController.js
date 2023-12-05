@@ -122,6 +122,7 @@ export async function register(req, res) {
                         privateKeyPath,
                         privateKey.export({ type: "pkcs8", format: "pem" })
                     );
+                    console.log(typeof publicKey);
                     bcrypt
                         .hash(password, 10)
                         .then((hashedPassword) => {
@@ -131,6 +132,10 @@ export async function register(req, res) {
                                 phone,
                                 password: hashedPassword,
                                 avatar: avatar || "",
+                                publicKey: publicKey.export({
+                                    type: "spki",
+                                    format: "pem",
+                                }),
                             });
                             newUser
                                 .save()
@@ -178,7 +183,14 @@ export async function login(req, res, next) {
             { userId: user._id, email: user.email, isAdmin: user.isAdmin },
             process.env.JWT_SECRET,
             {
-                expiresIn: "1d",
+                expiresIn: "86400s",
+            }
+        );
+        const refresh_token = jwt.sign(
+            { userId: user._id, email: user.email, isAdmin: user.isAdmin },
+            process.env.JWT_SECRET_REFRESH,
+            {
+                expiresIn: "7d",
             }
         );
         console.log(req.body.password);
@@ -206,59 +218,132 @@ export async function login(req, res, next) {
                 // accessToken: accessToken,
                 // refreshToken: refreshToken,
                 token: token,
+                refresh_token: refresh_token,
             });
     } catch (error) {
         next(error);
     }
 }
+
+export async function refreshToken(req, res, next) {
+    const refreshToken = req.headers.authorization.split(" ")[1];
+    if (!refreshToken) return res.json(false);
+    try {
+        const response = jwt.verify(
+            refreshToken,
+            process.env.JWT_SECRET_REFRESH
+        );
+        if (!response) return res.json("The user is not authentication");
+
+        const newAccessToken = jwt.sign(
+            {
+                userId: response._id,
+                email: response.email,
+                isAdmin: response.isAdmin,
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "86400s",
+            }
+        );
+        return res
+            .status(200)
+            .json({ access_token: newAccessToken, ...response });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+}
+
 export async function generateOtp(req, res, next) {
     try {
-        console.log(req.body.email);
-        req.app.locals.OTP = await otpGenerator.generate(6, {
-            lowerCaseAlphabets: false,
-            upperCaseAlphabets: false,
-            specialChars: false,
-        });
-        const transporter = nodemailer.createTransport({
-            service: "Gmail",
-            auth: {
-                user: process.env.EMAIL,
-                pass: process.env.PASSWORD,
-            },
-        });
-        let MailGenerator = new Mailgen({
-            theme: "default",
-            product: {
-                name: "Generate OTP",
-                link: "https://mailgen.js/",
-            },
-        });
-        let response = {
-            body: {
-                intro: `Your OTP is ${req.app.locals.OTP}`,
-                name: req.body.email,
-            },
-        };
-        let mail = MailGenerator.generate(response);
-        let message = {
-            from: process.env.EMAIL,
-            to: req.body.email,
-            subject: "Generate OTP",
-            html: mail,
-        };
+        const email = req.body.email;
+        const existEmail = await User.findOne({ email });
+        if (!existEmail) {
+            // return res.status(400).json({ err: "Email already exists" });
 
-        transporter
-            .sendMail(message)
-            .then(() => {
-                return res.status(200).json({
-                    message: "OTP sent successfully",
-                });
-            })
-            .catch((err) => {
-                return res.status(500).json({ err });
+            req.app.locals.OTP = await otpGenerator.generate(6, {
+                lowerCaseAlphabets: false,
+                upperCaseAlphabets: false,
+                specialChars: false,
             });
+            const transporter = nodemailer.createTransport({
+                service: "Gmail",
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.PASSWORD,
+                },
+            });
+            let MailGenerator = new Mailgen({
+                theme: "default",
+                product: {
+                    name: "Generate OTP",
+                    link: "https://mailgen.js/",
+                },
+            });
+            let response = {
+                body: {
+                    intro: `Your OTP is ${req.app.locals.OTP}`,
+                    name: req.body.email,
+                },
+            };
+            let mail = MailGenerator.generate(response);
+            let message = {
+                from: process.env.EMAIL,
+                to: req.body.email,
+                subject: "Generate OTP",
+                html: mail,
+            };
+
+            transporter
+                .sendMail(message)
+                .then(() => {
+                    return res.status(200).json({
+                        message: "OTP sent successfully",
+                    });
+                })
+                .catch((err) => {
+                    return res.status(500).json({ err });
+                });
+        } else {
+            return res.status(400).json({ err: "Email is not registered" });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to send OTP" });
+    }
+}
+
+export async function verifyOtp(req, res, next) {
+    try {
+        if (req.app.locals.OTP === req.body.otp) {
+            return res.status(200).json({
+                message: "OTP verified successfully",
+            });
+        } else {
+            return res.status(500).json({
+                message: "OTP verification failed",
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to verify OTP" });
+    }
+}
+
+export async function resetPassword(req, res, next) {
+    try {
+        const newPassword = req.body.password;
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            return res.status(400).json({ error: "User not found" });
+        }
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+        return res
+            .status(200)
+            .json({ message: "Password changed successfully" });
+    } catch (e) {
+        return res.status(500).json({ error: "Failed to change password" });
     }
 }

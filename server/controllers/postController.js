@@ -1,4 +1,5 @@
 import Post from "../models/post.js";
+import ContentBasedRecommender from "content-based-recommender";
 
 export const addPost = async (req, res, next) => {
     const post = new Post({ ...req.body, userId: req.user.userId });
@@ -69,11 +70,39 @@ export const getRandomPosts = async (req, res, next) => {
 };
 
 export const getSuggestedPosts = async (req, res, next) => {
+    // try {
+    //     const suggestedPosts = await Post.aggregate([{ $sample: { size: 3 } }]);
+    //     res.status(200).json(suggestedPosts);
+    // } catch (err) {
+    //     next(err);
+    // }
+
     try {
-        const suggestedPosts = await Post.aggregate([{ $sample: { size: 3 } }]);
-        res.status(200).json(suggestedPosts);
-    } catch (err) {
-        next(err);
+        const recommender = new ContentBasedRecommender({
+            minScore: 0.1,
+            maxSimilarDocuments: 100,
+        });
+        const postId = req.params.id;
+        console.log(postId);
+        const curPost = await Post.findById(postId);
+        const allPost = await Post.find();
+        const allPostRec = allPost.map((post) => ({
+            id: post._id,
+            content: post.title,
+        }));
+        recommender.train(allPostRec);
+        const similarDocuments = recommender.getSimilarDocuments(postId, 0, 3);
+        // const postRec = await Post.find({ _id: { $in: similarDocuments } });
+        console.log(similarDocuments);
+        var postRec;
+        if (similarDocuments.length > 0) {
+            postRec = await Post.find({ _id: { $in: similarDocuments } });
+        } else {
+            postRec = await Post.aggregate([{ $sample: { size: 3 } }]);
+        }
+        res.status(200).json(postRec);
+    } catch (e) {
+        next(e);
     }
 };
 

@@ -29,8 +29,8 @@ router.get("/:id/show", async (req, res) => {
 });
 router.post("/", verifyToken, async (req, res) => {
     // const newEvent = await new Event({ ...req.body, userId: req.user.id });
-    console.log(req.user);
-    const newEvent = await new Event({ ...req.body, userId: req.user.userId });
+    console.log(req.body);
+    const newEvent = new Event({ ...req.body, userId: req.user.userId });
 
     try {
         newEvent.save((err, event) => {

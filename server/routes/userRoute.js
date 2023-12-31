@@ -11,6 +11,8 @@ import {
     getUserMostSubscribed,
     getNewUsers,
     deleteUser,
+    getListUserSub,
+    searchUsers,
 } from "../controllers/userController.js";
 import { isAdmin, verifyToken } from "../middleware/auth.js";
 // import verifyUser from "./verifyToken.js";
@@ -28,4 +30,7 @@ router.get("/getAllUser", getAllUser);
 router.get("/getUserMostSubscribed", getUserMostSubscribed);
 router.get("/getNewUsers", getNewUsers);
 router.delete("/delete/:id", isAdmin, deleteUser);
+router.post("/getUserSubscribed", getListUserSub);
+router.get("/search", verifyToken, searchUsers);
+
 export default router;

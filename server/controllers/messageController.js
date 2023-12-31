@@ -6,15 +6,15 @@ import crypto from "crypto";
 export const addMessage = async (req, res, next) => {
     const message = new Message(req.body);
     const receiverUser = await Users.findById(req.body.receiverId);
-
+    console.log(receiverUser.publicKey);
     try {
-        const publicKey = Buffer.from(
-            fs.readFileSync(
-                `./certificate/${receiverUser.username}_public.pem`,
-                { encoding: "utf-8" }
-            )
-        );
-
+        // const publicKey = Buffer.from(
+        //     fs.readFileSync(
+        //         `./certificate/${receiverUser.username}_public.pem`,
+        //         { encoding: "utf-8" }
+        //     )
+        // );
+        const publicKey = Buffer.from(receiverUser.publicKey);
         const encryptedData = crypto.publicEncrypt(
             {
                 key: publicKey,

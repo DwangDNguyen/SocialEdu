@@ -122,7 +122,7 @@ export async function register(req, res) {
                         privateKeyPath,
                         privateKey.export({ type: "pkcs8", format: "pem" })
                     );
-                    console.log(typeof publicKey);
+
                     bcrypt
                         .hash(password, 10)
                         .then((hashedPassword) => {
@@ -257,55 +257,109 @@ export async function refreshToken(req, res, next) {
 export async function generateOtp(req, res, next) {
     try {
         const email = req.body.email;
+        const type = req.body.type;
         const existEmail = await User.findOne({ email });
-        if (!existEmail) {
-            // return res.status(400).json({ err: "Email already exists" });
 
-            req.app.locals.OTP = await otpGenerator.generate(6, {
-                lowerCaseAlphabets: false,
-                upperCaseAlphabets: false,
-                specialChars: false,
-            });
-            const transporter = nodemailer.createTransport({
-                service: "Gmail",
-                auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.PASSWORD,
-                },
-            });
-            let MailGenerator = new Mailgen({
-                theme: "default",
-                product: {
-                    name: "Generate OTP",
-                    link: "https://mailgen.js/",
-                },
-            });
-            let response = {
-                body: {
-                    intro: `Your OTP is ${req.app.locals.OTP}`,
-                    name: req.body.email,
-                },
-            };
-            let mail = MailGenerator.generate(response);
-            let message = {
-                from: process.env.EMAIL,
-                to: req.body.email,
-                subject: "Generate OTP",
-                html: mail,
-            };
+        if (type === "resetPassword") {
+            if (existEmail) {
+                // return res.status(400).json({ err: "Email already exists" });
 
-            transporter
-                .sendMail(message)
-                .then(() => {
-                    return res.status(200).json({
-                        message: "OTP sent successfully",
-                    });
-                })
-                .catch((err) => {
-                    return res.status(500).json({ err });
+                req.app.locals.OTP = await otpGenerator.generate(6, {
+                    lowerCaseAlphabets: false,
+                    upperCaseAlphabets: false,
+                    specialChars: false,
                 });
+                const transporter = nodemailer.createTransport({
+                    service: "Gmail",
+                    auth: {
+                        user: process.env.EMAIL,
+                        pass: process.env.PASSWORD,
+                    },
+                });
+                let MailGenerator = new Mailgen({
+                    theme: "default",
+                    product: {
+                        name: "Generate OTP",
+                        link: "https://mailgen.js/",
+                    },
+                });
+                let response = {
+                    body: {
+                        intro: `Your OTP is ${req.app.locals.OTP}`,
+                        name: req.body.email,
+                    },
+                };
+                let mail = MailGenerator.generate(response);
+                let message = {
+                    from: process.env.EMAIL,
+                    to: req.body.email,
+                    subject: "Generate OTP",
+                    html: mail,
+                };
+
+                transporter
+                    .sendMail(message)
+                    .then(() => {
+                        return res.status(200).json({
+                            message: "OTP sent successfully",
+                        });
+                    })
+                    .catch((err) => {
+                        return res.status(500).json({ err });
+                    });
+            } else {
+                return res.status(400).json({ err: "cvx" });
+            }
         } else {
-            return res.status(400).json({ err: "Email is not registered" });
+            if (!existEmail) {
+                // return res.status(400).json({ err: "Email already exists" });
+
+                req.app.locals.OTP = await otpGenerator.generate(6, {
+                    lowerCaseAlphabets: false,
+                    upperCaseAlphabets: false,
+                    specialChars: false,
+                });
+                const transporter = nodemailer.createTransport({
+                    service: "Gmail",
+                    auth: {
+                        user: process.env.EMAIL,
+                        pass: process.env.PASSWORD,
+                    },
+                });
+                let MailGenerator = new Mailgen({
+                    theme: "default",
+                    product: {
+                        name: "Generate OTP",
+                        link: "https://mailgen.js/",
+                    },
+                });
+                let response = {
+                    body: {
+                        intro: `Your OTP is ${req.app.locals.OTP}`,
+                        name: req.body.email,
+                    },
+                };
+                let mail = MailGenerator.generate(response);
+                let message = {
+                    from: process.env.EMAIL,
+                    to: req.body.email,
+                    subject: "Generate OTP",
+                    html: mail,
+                };
+
+                transporter
+                    .sendMail(message)
+                    .then(() => {
+                        return res.status(200).json({
+                            message: "OTP sent successfully",
+                        });
+                    })
+                    .catch((err) => {
+                        return res.status(500).json({ err });
+                    });
+            } else {
+                return res.status(400).json({ err: "Email is not registered" });
+            }
         }
     } catch (error) {
         console.error(error);

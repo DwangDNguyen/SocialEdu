@@ -22,6 +22,7 @@ const UsersSchema = new mongoose.Schema(
         phone: {
             type: String,
             unique: true,
+            required: [true, "Please provide a phone number"],
         },
         subscribers: {
             type: Number,

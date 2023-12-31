@@ -31,7 +31,7 @@ const EventsSchema = new mongoose.Schema({
             return date.setDate(date.getDate() + 1);
         },
     },
-    describe: { type: String },
+    describe: { type: String, required: true },
 });
 
 export default mongoose.model("Events", EventsSchema);

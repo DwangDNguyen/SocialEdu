@@ -188,3 +188,44 @@ export const deleteUser = async (req, res, next) => {
         next(err);
     }
 };
+
+export const getListUserSub = async (req, res, next) => {
+    try {
+        const { userIds } = req.body;
+
+        const users = await User.find({ _id: { $in: userIds } });
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error getting user info:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+export const searchUsers = async (req, res, next) => {
+    const query = req.query.q;
+    const currentUserId = req.user.userId;
+    const currentUser = await User.findById(currentUserId);
+    // const isAdmin = req.user.isAdmin;
+    const adminUser = await User.findOne({ isAdmin: true });
+    try {
+        const users = await User.find({
+            $and: [
+                {
+                    $or: [
+                        { username: { $regex: query, $options: "i" } },
+                        { email: { $regex: query, $options: "i" } },
+                    ],
+                },
+                {
+                    username: {
+                        $nin: [currentUser.username, adminUser.username],
+                    },
+                },
+            ],
+        });
+        res.status(200).json(users);
+    } catch (err) {
+        next(err);
+    }
+};

@@ -14,12 +14,13 @@ export async function getVideo(req, res, next) {
 export async function addWatchedVideo(req, res, next) {
     try {
         const user = await User.findById(req.user.userId);
-
+        console.log("type of:" + typeof req.user.publickey);
+        console.log(req.user.userId);
         const isVideoExists = user.watchedVideos?.some(
             (video) => video._id === req.body._id
         );
 
-        if (!isVideoExists) {
+        if (!isVideoExists && req.body.userId !== req.user.userId) {
             user.watchedVideos.push({
                 _id: req.body._id,
                 title: req.body.title,
@@ -55,8 +56,11 @@ export async function getVideoUser(req, res, next) {
 }
 export async function addVideo(req, res, next) {
     const newVideo = new Video({ ...req.body, userId: req.user.userId });
-    console.log(req.user);
+
     try {
+        if (req.body.tags.length === 0) {
+            return res.status(400).json("Tags are required");
+        }
         const savedVideo = await newVideo.save();
         res.status(200).json(savedVideo);
     } catch (err) {
@@ -98,54 +102,66 @@ export async function deleteVideo(req, res, next) {
 export async function randomVideo(req, res, next) {
     try {
         var arrTags = [];
+        let listVidRecommended;
         const currentUser = await User.findById(req.user.userId);
         const listWatchedVid = currentUser.watchedVideos;
-        const listWatchedVideos = listWatchedVid.map((video) => ({
-            id: video._id,
-            content: video.title,
-        }));
-        const allVid = await Video.find();
-        const vids = allVid.map((video) => ({
-            id: video._id,
-            content: video.title,
-        }));
-        const vidMap = vids.reduce((acc, vid) => {
-            acc[vid.id] = vid;
-            return acc;
-        }, {});
-        const recommender = new ContentBasedRecommender();
+        if (listWatchedVid.length === 0) {
+            listVidRecommended = await Video.aggregate([
+                { $sample: { size: 15 } },
+            ]);
+            return res.status(200).json(listVidRecommended);
+        } else {
+            const listWatchedVideos = listWatchedVid.map((video) => ({
+                id: video._id,
+                content: video.title,
+            }));
+            const allVid = await Video.find();
+            const vids = allVid.map((video) => ({
+                id: video._id,
+                content: video.title,
+            }));
+            const vidMap = vids.reduce((acc, vid) => {
+                acc[vid.id] = vid;
+                return acc;
+            }, {});
+            console.log("vidMap:", vidMap);
+            const recommender = new ContentBasedRecommender();
 
-        recommender.trainBidirectional(listWatchedVideos, vids);
+            recommender.trainBidirectional(listWatchedVideos, vids);
 
-        for (let watchedVids of listWatchedVideos) {
-            const relatedVids = recommender.getSimilarDocuments(watchedVids.id);
-            const tags = relatedVids.map((t) => vidMap[t.id].content);
-            // console.log(watchedVids.content, "related tags:", tags);
-            arrTags.push(...tags);
-        }
-        const titleVidRec = [...new Set(arrTags)];
-        console.log(titleVidRec);
-        console.log(titleVidRec.length);
-        if (titleVidRec.length < 12) {
-            const maxItemsToAdd = 12 - titleVidRec.length;
-            while (titleVidRec.length < 12) {
-                const randomItem =
-                    vids[Math.floor(Math.random() * vids.length)].content;
-                console.log(randomItem);
-                if (!titleVidRec.includes(randomItem)) {
-                    titleVidRec.push(randomItem);
+            for (let watchedVids of listWatchedVideos) {
+                const relatedVids = recommender.getSimilarDocuments(
+                    watchedVids.id
+                );
+                const tags = relatedVids.map((t) => vidMap[t.id].content);
+                // console.log(watchedVids.content, "related tags:", tags);
+                arrTags.push(...tags);
+            }
+            const titleVidRec = [...new Set(arrTags)];
+            console.log(titleVidRec);
+            console.log(titleVidRec.length);
+            if (titleVidRec.length < 12) {
+                const maxItemsToAdd = 12 - titleVidRec.length;
+                while (titleVidRec.length < 12) {
+                    const randomItem =
+                        vids[Math.floor(Math.random() * vids.length)].content;
+                    console.log(randomItem);
+                    if (!titleVidRec.includes(randomItem)) {
+                        titleVidRec.push(randomItem);
+                    }
                 }
             }
-        }
-        console.log(titleVidRec);
+            console.log(titleVidRec);
 
-        const listVidRecommended = await Video.find({
-            title: { $in: titleVidRec },
-        });
-        // console.log(listVidRecommended);
-        // const videos = await Video.aggregate([{ $sample: { size: 15 } }]);
-        // console.log(req.user);
-        res.status(200).json(listVidRecommended);
+            listVidRecommended = await Video.find({
+                title: { $in: titleVidRec },
+            });
+
+            // console.log(listVidRecommended);
+            // const videos = await Video.aggregate([{ $sample: { size: 15 } }]);
+            // console.log(req.user);
+            res.status(200).json(listVidRecommended);
+        }
     } catch (err) {
         next(err);
     }

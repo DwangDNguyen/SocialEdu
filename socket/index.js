@@ -33,6 +33,7 @@ const getUserNotifications = (username) => {
 };
 io.on("connection", (socket) => {
     console.log("a user connected");
+
     // io.emit("welcome", "this is socket server");
     socket.on("addUser", (userId) => {
         addUser(userId, socket.id);
@@ -46,6 +47,7 @@ io.on("connection", (socket) => {
             senderId,
             text,
         });
+        // io.emit("new-message");
     });
 
     // socket.on("sendNotification", ({ senderId, receiverId, type }) => {

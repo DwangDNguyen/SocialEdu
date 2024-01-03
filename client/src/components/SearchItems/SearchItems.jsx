@@ -3,9 +3,11 @@ import "./searchItems.scss";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { format } from "timeago.js";
 import { user } from "../../redux/axios/axios";
+import { useNavigate } from "react-router-dom";
 
 const SearchItems = ({ videoSearch, type }) => {
     const [channel, setChannel] = useState({});
+    const navigate = useNavigate();
     useEffect(() => {
         const thisChannel = async () => {
             const res = await user.get("/find/" + videoSearch?.userId);
@@ -20,6 +22,7 @@ const SearchItems = ({ videoSearch, type }) => {
                     ? "search-video-item item-trending"
                     : "search-video-item"
             }
+            onClick={() => navigate(`/video/${videoSearch._id}`)}
         >
             <div className="search-img-vid">
                 <img src={videoSearch.ImgUrl} />

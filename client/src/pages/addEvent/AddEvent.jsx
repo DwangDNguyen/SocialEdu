@@ -49,6 +49,7 @@ const AddEvent = ({ addEventApi, error }) => {
 
     const onSubmit = async (values) => {
         setFirstRender(false);
+        console.log(values);
         addEventApi(values).then(() => {
             setRerender(!rerender);
             navigate(`/calendar/${currentUser._id}`);

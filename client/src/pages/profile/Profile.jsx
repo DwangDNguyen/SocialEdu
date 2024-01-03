@@ -11,7 +11,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import { useSelector } from "react-redux";
 import ListVideos from "../../components/ListVideos/ListVideos";
 import CardProfile from "../../components/CardProfile/CardProfile";
-import { post, video } from "../../redux/axios/axios";
+import { post, user, video } from "../../redux/axios/axios";
 import { useDispatch } from "react-redux";
 import { format } from "timeago.js";
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ const Profile = () => {
     const currentUser = useSelector((state) => state.user.user);
     const [listVid, setListVid] = useState([]);
     const [listBlog, setListBlog] = useState([]);
+    const [listSubscribedUser, setListSubscribedUser] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [tabSelected, setTabSelected] = useState(0);
@@ -28,7 +29,13 @@ const Profile = () => {
     const [allVid, setAllVid] = useState([]);
     const { t } = useTranslation("setting");
     const dispatch = useDispatch();
-    const tabs = ["Video", t("profile.Playlist"), "Blog", "Liked Videos"];
+    const tabs = [
+        "Video",
+        t("profile.Playlist"),
+        "Blog",
+        "Liked Videos",
+        "Subscriptions",
+    ];
     const listVidLiked = [];
     const handleTabClick = (index) => {
         setTabSelected(index);
@@ -38,16 +45,22 @@ const Profile = () => {
         }
     };
     useEffect(() => {
+        const userIds = currentUser.subscribedUsers;
         const fetchData = async () => {
             setIsLoading(true);
             const resListVid = await video.get("/findUser/" + currentUser._id);
             const resAllVid = await video.get("/getAllVideos");
             const resListBlog = await post.get("/listPost/" + currentUser._id);
+            const resListUserSubscribed = await user.post(
+                "/getUserSubscribed",
+                { userIds }
+            );
 
             // console.log(resListVid);
             setListVid(resListVid.data);
             setListBlog(resListBlog.data);
             setAllVid(resAllVid.data);
+            setListSubscribedUser(resListUserSubscribed.data);
             // dispatch(showVideos(currentUser._id));
             setIsLoading(false);
         };
@@ -90,7 +103,7 @@ const Profile = () => {
             listVidLiked.push(vid);
         }
     });
-
+    console.log(currentUser);
     return (
         <div className="profile">
             {isLoading ? (
@@ -298,6 +311,27 @@ const Profile = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                            {tabSelected === 4 && (
+                                <div className="list-video list-user-subscribed">
+                                    {listSubscribedUser?.map((user, index) => (
+                                        <Link to={`/channel/${user._id}`}>
+                                            <div
+                                                className="subscriptions-item"
+                                                key={index}
+                                            >
+                                                <div className="subscriptions-item-avt">
+                                                    <img src={user.avatar} />
+                                                </div>
+                                                <h1>{user.username}</h1>
+                                                <span>
+                                                    {user.subscribers}{" "}
+                                                    subscribers
+                                                </span>
                                             </div>
                                         </Link>
                                     ))}

@@ -93,10 +93,13 @@ const Upload = ({ setOpen, type, videoCurrent }) => {
                 }
                 setOpen(false);
             } catch (err) {
-                toast.error("Video Upload Failed", {
-                    autoClose: 3000,
-                    theme: "dark",
-                });
+                toast.error(
+                    "Video Upload Failed! Please check your information",
+                    {
+                        autoClose: 3000,
+                        theme: "dark",
+                    }
+                );
             }
         } else if (type === "update") {
             try {

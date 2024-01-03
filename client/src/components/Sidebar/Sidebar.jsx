@@ -132,12 +132,12 @@ const Sidebar = ({
                             <span>{t("home.Blog")}</span>
                         </li>
                     </Link>
-                    <Link to="/chatbot">
+                    {/* <Link to="/chatbot">
                         <li>
                             <WhatshotIcon className="icon" />
                             <span>{t("home.Chatbot")}</span>
                         </li>
-                    </Link>
+                    </Link> */}
                     <div className="title service">{t("home.Service")}</div>
 
                     {/* <li>

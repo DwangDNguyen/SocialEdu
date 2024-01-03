@@ -137,7 +137,7 @@ const Navbar = ({ socket, search, handleChangeSearch, submitSearch }) => {
                         </div>
                         {currentUser ? (
                             <>
-                                <div className="navbar-item notify">
+                                {/* <div className="navbar-item notify">
                                     <CircleNotificationsIcon
                                         className="icon"
                                         onClick={() =>
@@ -146,12 +146,12 @@ const Navbar = ({ socket, search, handleChangeSearch, submitSearch }) => {
                                             )
                                         }
                                     />
-                                    {/* {notifications && (
+                                    {notifications && (
                                         <div className="amount">
                                             {notifications.length}
                                         </div>
-                                    )} */}
-                                </div>
+                                    )}
+                                </div> */}
                                 <Link to={`/chat`}>
                                     <div className="navbar-item mess">
                                         <MessageIcon className="icon" />

@@ -25,7 +25,10 @@ const VerifyOTP = () => {
         } else {
             setError("");
             localStorage.setItem("email", email);
-            await auth.post("/send-otp", { email: email });
+            await auth.post("/send-otp", {
+                email: email,
+                type: "resetPassword",
+            });
             navigate("/verify?type=verifyOtp");
         }
     };

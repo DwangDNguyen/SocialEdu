@@ -17,7 +17,7 @@ import commentRoutes from "./routes/commentRoute.js";
 import conversationRoutes from "./routes/conversationsRoute.js";
 import messageRoutes from "./routes/messagesRoute.js";
 import postRoutes from "./routes/postRoute.js";
-import notificationRoutes from "./routes/notificationRoute.js";
+// import notificationRoutes from "./routes/notificationRoute.js";
 import chatBotRoutes from "./routes/chatBotRoute.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -64,11 +64,13 @@ app.use(cookieParser());
 app.use(bodyParser.json({ limit: "100mb" }));
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 app.use(express.json());
-app.use(cors({
-    origins: [""],
-    methods:["POST", "GET", "PUT", "DELETE"],
-    credentials: true,
-}));
+app.use(
+    cors({
+        origins: [""],
+        methods: ["POST", "GET", "PUT", "DELETE"],
+        credentials: true,
+    })
+);
 app.use("/api/video", videoRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/user", userRoutes);
@@ -77,7 +79,7 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/conversation", conversationRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/post", postRoutes);
-app.use("/api/notification", notificationRoutes);
+// app.use("/api/notification", notificationRoutes);
 app.use("/api/chatBot", chatBotRoutes);
 
 // const main = async () => {

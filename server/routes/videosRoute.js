@@ -1,4 +1,6 @@
 import express from "express";
+import youtube from "youtube-api";
+
 const router = express.Router();
 import Video from "../models/video.js";
 import {
@@ -21,7 +23,38 @@ import {
     deleteAllWatchedVideo,
 } from "../controllers/videoController.js";
 import { isAdmin, verifyToken } from "../middleware/auth.js";
+import { oAuth, uploadVideoFile } from "../middleware/video.js";
 router.post("/", verifyToken, addVideo);
+// router.get("/oauth2Callback", (req, res) => {
+//     oAuth.getToken(req.query.code, (err, tokens) => {
+//         if (err) {
+//             console.log(err);
+//             return;
+//         }
+//         const { videoUrl, ...info } = req.body;
+//         oAuth.setCredentials(tokens);
+//         youtube.video.insert(
+//             {
+//                 resource: {
+//                     snippet: {
+//                         ...info,
+//                     },
+//                     status: {
+//                         privacyStatus: "private",
+//                     },
+//                     part: "snippet,status",
+//                     media: {
+//                         body: fs.createReadStream(videoUrl),
+//                     },
+//                 },
+//             },
+//             (err, data) => {
+//                 console.log(data);
+//                 process.exit();
+//             }
+//         );
+//     });
+// });
 router.get("/randomVideo", verifyToken, randomVideo);
 router.get("/randomRecommendVideo", verifyToken, randomRecommendVideo);
 router.post("/watchedVideo", verifyToken, addWatchedVideo);

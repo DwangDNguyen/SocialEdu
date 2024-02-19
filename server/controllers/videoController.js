@@ -1,6 +1,9 @@
 import Video from "../models/video.js";
 import User from "../models/users.js";
 import ContentBasedRecommender from "content-based-recommender";
+import open from "open";
+import { oAuth } from "../middleware/video.js";
+
 export async function getVideo(req, res, next) {
     try {
         const video = await Video.findById(req.params.id);
@@ -58,9 +61,24 @@ export async function addVideo(req, res, next) {
     const newVideo = new Video({ ...req.body, userId: req.user.userId });
 
     try {
+        console.log(req.body.videoUrl);
+
         if (req.body.tags.length === 0) {
             return res.status(400).json("Tags are required");
         }
+        // if (req.body.videoUrl) {
+        //     const filename = req.body.videoUrl.name;
+        //     open(
+        //         oAuth.generateAuthUrl({
+        //             access_type: "offline",
+        //             scope: "https://www.googleapis.com/auth/youtube.upload",
+        //             state: JSON.stringify({
+        //                 ...req.body,
+        //                 filename: filename,
+        //             }),
+        //         })
+        //     );
+        // }
         const savedVideo = await newVideo.save();
         res.status(200).json(savedVideo);
     } catch (err) {
@@ -105,6 +123,7 @@ export async function randomVideo(req, res, next) {
         let listVidRecommended;
         const currentUser = await User.findById(req.user.userId);
         const listWatchedVid = currentUser.watchedVideos;
+        console.log(listWatchedVid.length);
         if (listWatchedVid.length === 0) {
             listVidRecommended = await Video.aggregate([
                 { $sample: { size: 15 } },

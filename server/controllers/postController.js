@@ -53,17 +53,17 @@ export const getPost = async (req, res, next) => {
         next(err);
     }
 };
-
+let fetchedPosts = [];
 export const getRandomPosts = async (req, res, next) => {
     try {
+        const allPosts = await Post.find({});
         const page = parseInt(req.query.page) || 1;
         const postsPerPage = 6;
         const startIndex = (page - 1) * postsPerPage;
         const endIndex = page * postsPerPage;
-        const posts = await Post.aggregate([{ $sample: { size: 18 } }]);
-        const paginatedPosts = posts.slice(startIndex, endIndex);
-
-        res.status(200).json(paginatedPosts);
+        // const posts = await Post.aggregate([{ $sample: { size: 18 } }]);
+        const paginatePosts = allPosts.slice(startIndex, endIndex);
+        return res.status(200).json(paginatePosts);
     } catch (err) {
         next(err);
     }

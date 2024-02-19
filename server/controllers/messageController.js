@@ -61,7 +61,7 @@ export const getMessage = async (req, res, next) => {
             const otherMessage = message.find(
                 (msg) => msg.sender === currentUserId.toString()
             );
-            //  Lấy thông tin người nhận
+
             let otherId;
             if (otherMessage !== undefined) {
                 otherId = otherMessage?.receiverId;

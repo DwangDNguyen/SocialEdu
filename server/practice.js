@@ -1,86 +1,77 @@
-import ContentBasedRecommender from "content-based-recommender";
+// var lengthOfLastWord = function (s) {
+//     const newArr = s.split(" ");
 
-const posts = [
-    {
-        id: "1000001",
-        content: "Why studying javascript is fun?",
-    },
-    {
-        id: "1000002",
-        content: "The trend for javascript in machine learning",
-    },
-    {
-        id: "1000003",
-        content: "The most insightful stories about JavaScript",
-    },
-    {
-        id: "1000004",
-        content: "Introduction to Machine Learning",
-    },
-    {
-        id: "1000005",
-        content: "Machine learning and its application",
-    },
-    {
-        id: "1000006",
-        content: "Python vs Javascript, which is better?",
-    },
-    {
-        id: "1000007",
-        content: "How Python saved my life?",
-    },
-    {
-        id: "1000008",
-        content: "The future of Bitcoin technology",
-    },
-    {
-        id: "1000009",
-        content: "Is it possible to use javascript for machine learning?",
-    },
-];
+//     console.log(newArr);
+//     for (let i = newArr.length - 1; i >= 0; i--) {
+//         if (newArr[i] === " " || newArr[i] === "") {
+//             newArr.splice(i, 1);
+//         }
+//     }
+//     console.log(newArr);
+//     console.log(" ".length);
+//     console.log(newArr[newArr.length - 1].length);
+// };
+// lengthOfLastWord("   fly me   to   the moon  ");
 
-const tags = [
-    {
-        id: "1",
-        content: "Javascript",
-    },
-    {
-        id: "2",
-        content: "machine learning",
-    },
-    {
-        id: "3",
-        content: "application",
-    },
-    {
-        id: "4",
-        content: "introduction",
-    },
-    {
-        id: "5",
-        content: "future",
-    },
-    {
-        id: "6",
-        content: "Python",
-    },
-    {
-        id: "7",
-        content: "Bitcoin",
-    },
-];
+//-------------------------------------------------------------------//
 
-const tagMap = tags.reduce((acc, tag) => {
-    acc[tag.id] = tag;
-    return acc;
-}, {});
-console.log(tagMap);
-const recommender = new ContentBasedRecommender();
+// var removeDuplicates = function (nums) {
+//     let i = 0;
+//     for (let j = 0; j < nums.length; j++) {
+//         if (nums[j] != nums[i]) nums[++i] = nums[j];
+//     }
+//     console.log(nums);
+//     return ++i;
+// };
 
-recommender.trainBidirectional(posts, tags);
+// const result = removeDuplicates([0, 0, 1, 1, 1, 2, 2, 3, 3, 4]);
 
-for (let post of posts) {
-    const relatedTags = recommender.getSimilarDocuments(post.id);
-    const tags = relatedTags.map((t) => tagMap[t.id].content);
-    // console.log(post.content, "related tags:", tags);
-}
+// console.log(result);
+
+//--------------------------------------------------------------------//
+// var symbols = {
+//     I: 1,
+//     V: 5,
+//     X: 10,
+//     L: 50,
+//     C: 100,
+//     D: 500,
+//     M: 1000,
+// };
+
+// var romanToInt = function (s) {
+//     let value = 0;
+//     for (let i = 0; i < s.length; i += 1) {
+//         console.log("s[i]", symbols[s[i]]);
+//         console.log("value", value);
+
+//         symbols[s[i]] < symbols[s[i + 1]]
+//             ? (value -= symbols[s[i]])
+//             : (value += symbols[s[i]]);
+//     }
+//     return value;
+// };
+
+// const result = romanToInt("LVIII");
+// console.log(result);
+
+//--------------------------------------------------------------------//
+const digits = [6, 1, 4, 5, 3, 9, 0, 1, 9, 5, 1, 8, 6, 7, 0, 5, 5, 4, 3];
+var plusOne = function (digits) {
+    for (var i = digits.length - 1; i >= 0; i--) {
+        digits[i]++;
+        if (digits[i] > 9) {
+            digits[i] = 0;
+        } else {
+            return digits;
+        }
+    }
+    console.log(digits);
+    digits.unshift(1);
+    console.log(digits);
+
+    return digits;
+};
+
+const result = plusOne(digits);
+console.log(result);

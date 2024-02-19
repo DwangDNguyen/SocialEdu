@@ -3,6 +3,7 @@ import Video from "../models/video.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import fs from "fs";
+import { unlinkSync } from "fs";
 
 export async function getUser(req, res) {
     const { id } = req.params;
@@ -183,6 +184,8 @@ export const getNewUsers = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
     try {
         await User.findByIdAndDelete(req.params.id);
+        await unlinkSync(`./certificate/${req.body.username}_public.pem`);
+        await unlinkSync(`./certificate/${req.body.username}_private.pem`);
         res.status(200).json("User has been deleted");
     } catch (err) {
         next(err);

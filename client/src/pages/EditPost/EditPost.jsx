@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 const EditPost = () => {
     const { t } = useTranslation("blog");
+    const [isLoading, setIsLoading] = useState(false);
     const [formErrors, setFormErrors] = useState({});
     const [currentPost, setCurrentPost] = useState({});
     const path = useLocation().pathname.split("/")[3];
@@ -73,11 +74,13 @@ const EditPost = () => {
         setFormErrors(validate(image, title, content));
         // console.log({ image, title, content });
         try {
+            setIsLoading(true);
             await post.put(`/update/${path}`, {
                 image: image,
                 title: title,
                 content: content,
             });
+            setIsLoading(false);
             toast.success("Post updated successfully", {
                 autoClose: 4500,
                 onClose: () => {
@@ -88,6 +91,7 @@ const EditPost = () => {
                 theme: "dark",
             });
         } catch (err) {
+            setIsLoading(false);
             console.log(err);
         }
     };
@@ -151,7 +155,7 @@ const EditPost = () => {
             </div>
 
             <div className="post-btn" onClick={handleUpdatePost}>
-                {t("create post.Update Post")}
+                {isLoading ? "Loading..." : t("create post.Update Post")}
             </div>
         </div>
     );

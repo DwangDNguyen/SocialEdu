@@ -24,7 +24,7 @@ import {
 import Comments from "../../components/Comments/Comments";
 import Comment from "../../components/Comment/Comment";
 import RecommendVid from "../../components/RecommendVid/RecommendVid";
-import { comment, notification, user, video } from "../../redux/axios/axios";
+import { comment, user, video } from "../../redux/axios/axios";
 import { Link, useLocation } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,29 +34,78 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import { subscription } from "../../redux/reducers/userSlice";
 import { useTranslation } from "react-i18next";
+import {
+    updateTimeVideo,
+    addTimeVideo,
+    resetTimeVideo,
+} from "../../redux/reducers/timeVideoReducer";
 
 const Video = () => {
     const { t } = useTranslation("video");
-    const [channel, setChannel] = useState({});
-    const [currentVid, setCurrentVid] = useState({});
-    const [listComment, setListComment] = useState([]);
-    const [notifications, setNotifications] = useState([]);
-    const [isOpen, setIsOpen] = useState(false);
-    const videoPlayerRef = useRef(null);
-    const [videoState, setVideoState] = useState({});
-    const [isPlaying, setIsPlaying] = useState(true);
-    const [isReady, setIsReady] = useState(false);
-    const path = useLocation().pathname.split("/")[2];
     const { currentVideo } = useSelector((state) => state.video);
     const currentUser = useSelector((state) => state.user.user);
-    const socket = useSelector((state) => state.socket);
+    // const socket = useSelector((state) => state.socket);
+    // const listTimeVid = useSelector((state) => state.timeVideo.timeVideo);
+    // const currentTimeVideo = useSelector(
+    //     (state) => state.timeVideo.currentTimeVideo
+    // );
+    // const [currentTimeVid, setCurrentTimeVid] = useState(
+    //     currentTimeVideo.time || 0
+    // );
+    const [channel, setChannel] = useState({});
+    const [currentVid, setCurrentVid] = useState({});
+    const [isOpen, setIsOpen] = useState(false);
+    const videoPlayerRef = useRef(null);
+    const [isReady, setIsReady] = useState(false);
+    const path = useLocation().pathname.split("/")[2];
     const [isLoading, setIsLoading] = useState(false);
-    // console.log(useSelector((state) => state.socket.socket));
-    // const [viewVid, setViewVid] = useState(currentVideo.views);
-    // console.log(currentUser);
     const dispatch = useDispatch();
     // const socket = useRef();
-    // console.log(path);
+    // console.log(currentTimeVideo);
+    // console.log(listTimeVid);
+    // useEffect(() => {
+    //     const findTimeById = (id) => {
+    //         const videoObject = listTimeVid?.find((item) => item.id === id);
+    //         console.log("videoObject: " + videoObject);
+    //         setCurrentTimeVid(videoObject ? videoObject.time : 0);
+    //     };
+
+    //     findTimeById(path);
+    // }, [path]);
+    // useEffect(() => {
+    //     const handleBeforeUnload = (event) => {
+    //         dispatch(
+    //             addTimeVideo({
+    //                 id: currentVid._id,
+    //                 time: currentTimeVid,
+    //             })
+    //         );
+    //         const videoObject = listTimeVid?.find((item) => item.id === path);
+
+    //         setCurrentTimeVid(videoObject ? videoObject.time : 0);
+    //     };
+
+    //     const handleUnload = () => {
+    //         console.log("unloading");
+    //     };
+
+    //     window.addEventListener("beforeUnload", handleBeforeUnload);
+    //     window.addEventListener("unload", handleUnload);
+
+    //     return () => {
+    //         window.removeEventListener("beforeUnload", handleBeforeUnload);
+    //         window.removeEventListener("unload", handleUnload);
+    //     };
+    // }, [dispatch, path, currentTimeVid]);
+
+    // console.log(currentTimeVid);
+    const onReady = React.useCallback(() => {
+        if (!isReady) {
+            const timeToStart = 0;
+            videoPlayerRef.current.seekTo(timeToStart, "seconds");
+            setIsReady(true);
+        }
+    }, [isReady]);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -83,56 +132,12 @@ const Video = () => {
         };
         fetchData();
     }, [path, dispatch]);
-    // console.log(channel);
-
-    const onReady = React.useCallback(() => {
-        if (!isReady) {
-            const timeToStart = 0;
-            videoPlayerRef.current.seekTo(timeToStart, "seconds");
-            setIsReady(true);
-        }
-    }, [isReady]);
-    // useEffect(() => {
-    //     socket.current = io("ws://localhost:8901");
-    // }, [socket]);
-    // useEffect(() => {
-    //     socket.current.emit("addUserNotifications", currentUser.username);
-    // }, [socket, currentUser]);
     const handleLike = async (type) => {
         await user.put("/like/" + currentVid._id);
-        if (currentUser._id !== channel._id) {
-            await notification.post("/", {
-                senderId: currentUser._id,
-                receiverId: channel._id,
-                content: `${currentUser.username} liked your video`,
-            });
-            dispatch(like(currentUser._id));
-        }
-
-        socket.current.emit("sendNotification", {
-            senderName: currentUser.username,
-            avatarImg: currentUser.avatar,
-            receiverName: channel.username,
-            type: type,
-        });
     };
 
     const handleDislike = async (type) => {
         await user.put("/dislike/" + currentVid._id);
-        if (currentUser._id !== channel._id) {
-            await notification.post("/", {
-                senderId: currentUser._id,
-                receiverId: channel._id,
-                content: `${currentUser.username} disliked your video`,
-            });
-            dispatch(dislike(currentUser._id));
-        }
-        socket.current.emit("sendNotification", {
-            senderName: currentUser.username,
-            avatarImg: currentUser.avatar,
-            receiverName: channel.username,
-            type: type,
-        });
     };
 
     const handleSub = async () => {
@@ -140,16 +145,14 @@ const Video = () => {
             await user.put(`/unsub/${channel._id}`);
         } else {
             await user.put(`/sub/${channel._id}`);
-            await notification.post("/", {
-                senderId: currentUser._id,
-                receiverId: channel._id,
-                content: `${currentUser.username} subscribed to your channel`,
-            });
         }
 
         dispatch(subscription(channel._id));
     };
-    const handleDownload = async () => {};
+    // const handleVideoProgress = (state) => {
+    //     const currentTime = state.played * videoPlayerRef.current.getDuration();
+    //     setCurrentTimeVid(currentTime);
+    // };
     return (
         <div className="video">
             {/* <Sidebar />
@@ -172,6 +175,21 @@ const Video = () => {
                                 controls={true}
                                 onReady={onReady}
                                 modestbranding={1}
+                                // onProgress={(state) =>
+                                //     handleVideoProgress(state)
+                                // }
+                                // onPause={() => {
+                                //     setCurrentTimeVid(
+                                //         videoPlayerRef.current.getCurrentTime()
+                                //     );
+                                //     // dispatch(resetTimeVideo());
+                                //     dispatch(
+                                //         addTimeVideo({
+                                //             id: currentVid._id,
+                                //             time: currentTimeVid,
+                                //         })
+                                //     );
+                                // }}
                             />
                             {/* <iframe src={currentVid.videoUrl} controls /> */}
                         </div>
@@ -301,12 +319,6 @@ const Video = () => {
                                 {t("comment.Comments")}
                             </h3>
                             <Comments videoId={path} />
-                            {/* <div className="list-comment">
-                                <Comment />
-                                <Comment />
-                                <Comment />
-                                <Comment />
-                            </div> */}
                         </div>
                     </div>
                     <div className="recommend-vid">

@@ -7,6 +7,8 @@ import userReducer from "./userSlice.js";
 import commentReducer from "./commentReducer";
 import videoReducer from "./videoSlice.js";
 import socketReducer from "./socketSlice.js";
+import infoRegisterReducer from "./infoRegisterReducer.js";
+import timeVideoReducer from "./timeVideoReducer.js";
 
 const rootReducer = combineReducers({
     event: EventReducer,
@@ -17,6 +19,8 @@ const rootReducer = combineReducers({
     comment: commentReducer,
     video: videoReducer,
     socket: socketReducer,
+    infoRegister: infoRegisterReducer,
+    timeVideo: timeVideoReducer,
 });
 
 export default rootReducer;

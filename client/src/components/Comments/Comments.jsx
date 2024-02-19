@@ -12,9 +12,14 @@ import {
     editComment,
 } from "../../redux/actions/commentsAction";
 import { useTranslation } from "react-i18next";
+import Filter from "bad-words";
+import { ToastContainer, toast } from "react-toastify";
+
+import { blacklist } from "../../blacklist";
 const Comments = ({ videoId }) => {
     const currentUser = useSelector((state) => state.user.user);
     const [comments, setComments] = useState([]);
+    const [blackList, setBlacklist] = useState([]);
     const [textComment, setTextComment] = useState({
         id: "",
         desc: "",
@@ -64,9 +69,17 @@ const Comments = ({ videoId }) => {
     };
     const postComment = async (e) => {
         e.preventDefault();
+        var filter = new Filter();
+        filter.addWords(...blacklist);
         const { desc, videoId } = textComment;
         if (desc.trim() === "") return;
         const newComment = await dispatch(addComment({ ...textComment }));
+
+        if (filter.isProfane(newComment.desc)) {
+            toast.error("Your comment contains inappropriate words!");
+        }
+        newComment.desc = filter.clean(newComment.desc);
+
         setComments([...comments, newComment]);
         setTextComment({ desc: "", videoId: videoId });
         commentRef.current.scrollIntoView({ behavior: "smooth" });
@@ -87,6 +100,7 @@ const Comments = ({ videoId }) => {
     };
     return (
         <>
+            <ToastContainer theme="dark" />
             <form onSubmit={!isEditing ? postComment : updateComment}>
                 <div className="comments">
                     <div className="avt-user">

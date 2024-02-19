@@ -19,7 +19,7 @@ import { io } from "socket.io-client";
 import Sidebar from "../Sidebar/Sidebar";
 import { useTranslation } from "react-i18next";
 import { locales } from "../../i18n";
-import { notification } from "../../redux/axios/axios";
+// import { notification } from "../../redux/axios/axios";
 import { format } from "timeago.js";
 import Notify from "../notify/Notify";
 
@@ -31,28 +31,28 @@ const Navbar = ({ socket, search, handleChangeSearch, submitSearch }) => {
     const currentUser = useSelector((state) => state.user.user);
     const [open, setOpen] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
-    const [notifications, setNotifications] = useState([]);
-    const [openNotifications, setOpenNotifications] = useState(false);
+    // const [notifications, setNotifications] = useState([]);
+    // const [openNotifications, setOpenNotifications] = useState(false);
     // const [search, setSearch] = useState("");
     const [openLanguage, setOpenLanguage] = useState(false);
     const [user, setUser] = useState({});
     const navigate = useNavigate();
-    useEffect(() => {
-        socket.current?.on("getNotification", (data) => {
-            setNotifications((prev) => [...prev, data]);
-        });
-    }, [socket]);
-    useEffect(() => {
-        const fetchNotifications = async () => {
-            const res = await notification.get(
-                "/notifications/" + currentUser._id
-            );
-            setNotifications(res.data);
-        };
-        fetchNotifications();
-    }, [currentUser._id]);
+    // useEffect(() => {
+    //     socket.current?.on("getNotification", (data) => {
+    //         setNotifications((prev) => [...prev, data]);
+    //     });
+    // }, [socket]);
+    // useEffect(() => {
+    //     const fetchNotifications = async () => {
+    //         const res = await notification.get(
+    //             "/notifications/" + currentUser._id
+    //         );
+    //         setNotifications(res.data);
+    //     };
+    //     fetchNotifications();
+    // }, [currentUser._id]);
     // console.log(socket);
-    console.log(notifications);
+    // console.log(notifications);
     // const handleChangeSearch = (e) => {
     //     e.preventDefault();
     //     setSearch(e.target.value);
@@ -181,34 +181,17 @@ const Navbar = ({ socket, search, handleChangeSearch, submitSearch }) => {
                         )}
                     </div>
                 </div>
-                {openNotifications && (
+                {/* {openNotifications && (
                     <div className="notifications">
                         <div className="notifications-list">
                             <h1>Notifications</h1>
                             {notifications.map((n, index) => (
                                 <Notify n={n} key={index} />
                             ))}
-                            {/* <div className="notification-item">
-                                <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" />
-                                <div className="notification-content">
-                                    <span>Notification content</span>
-                                </div>
-                            </div>
-                            <div className="notification-item">
-                                <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" />
-                                <div className="notification-content">
-                                    <span>Notification content</span>
-                                </div>
-                            </div>
-                            <div className="notification-item">
-                                <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" />
-                                <div className="notification-content">
-                                    <span>Notification content</span>
-                                </div>
-                            </div> */}
+                            
                         </div>
                     </div>
-                )}
+                )} */}
                 {openLanguage && (
                     <div className="language-dropdown">
                         <div

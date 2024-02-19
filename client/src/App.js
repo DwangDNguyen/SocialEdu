@@ -34,7 +34,6 @@ import AdminUser from "./pages/adminUser/AdminUser";
 import AdminVideo from "./pages/adminVideo/AdminVideo";
 import Trending from "./pages/trending/Trending";
 import VerifyOTP from "./pages/verifyOTP/VerifyOTP";
-import Chatbot from "./pages/chatbot/Chatbot";
 
 function App() {
     const { darkMode } = useContext(DarkModeContext);
@@ -308,7 +307,7 @@ function App() {
                         }
                     />
 
-                    <Route
+                    {/* <Route
                         path="/chatbot"
                         element={
                             <PrivateRoute>
@@ -317,7 +316,7 @@ function App() {
                                 </Layout>
                             </PrivateRoute>
                         }
-                    />
+                    /> */}
 
                     {/* admin */}
                     <Route

@@ -12,7 +12,7 @@
 
     .upload-container {
         width: 600px;
-        height: 680px;
+        // height: 680px;
         background-color: var(--clr-white);
         padding: 20px;
         display: flex;
@@ -31,39 +31,44 @@
         & h1 {
             text-align: center;
         }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
 
-        & label {
-            font-size: 14px;
-            margin-bottom: -10px;
-        }
-
-        input {
-            border: 1px solid #f5f5f5;
-            padding: 10px;
-            border-radius: 3px;
-            background-color: transparent;
-            z-index: 999;
-            font-family: "Golos Text", sans-serif;
-        }
-
-        & textarea {
-            border: 1px solid #f5f5f5;
-            border-radius: 3px;
-            padding: 10px;
-            background-color: transparent;
-            &:focus {
-                outline: none;
+            & label {
+                font-size: 14px;
+                margin-bottom: -10px;
             }
-        }
 
-        & button {
-            border-radius: 3px;
-            border: none;
-            padding: 10px 20px;
-            font-weight: 500;
-            background-color: #f5f5f5;
-            color: #606060;
-            cursor: pointer;
+            input {
+                border: 1px solid #f5f5f5;
+                padding: 10px;
+                border-radius: 3px;
+                background-color: transparent;
+                z-index: 999;
+                font-family: "Golos Text", sans-serif;
+            }
+
+            & textarea {
+                border: 1px solid #f5f5f5;
+                border-radius: 3px;
+                padding: 10px;
+                background-color: transparent;
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            & button {
+                border-radius: 3px;
+                border: none;
+                padding: 10px 20px;
+                font-weight: 500;
+                background-color: #f5f5f5;
+                color: #606060;
+                cursor: pointer;
+            }
         }
     }
 }

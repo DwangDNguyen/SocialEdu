@@ -53,7 +53,7 @@ const Login = () => {
             });
             // dispatch({ type: "LOGIN", payload: res.data });
             toast.success("Login Successfully!!", {
-                autoClose: 4500,
+                autoClose: 3000,
                 onClose: () => {
                     // setTimeout(() => {
                     dispatch(loginSuccess(res.data));

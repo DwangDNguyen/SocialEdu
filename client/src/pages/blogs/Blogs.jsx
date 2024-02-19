@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./blogs.scss";
 import Blog from "../../components/Blog/Blog";
 import { post } from "../../redux/axios/axios";
@@ -16,18 +16,30 @@ const Blogs = () => {
     const [loading, setLoading] = useState(true);
     const [hasMore, setHasMore] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+
+    // const loadedPostIds = useRef([]);
     const { t } = useTranslation("blog");
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
     useEffect(() => {
         const fetchPost = async () => {
             const res = await post.get("/posts?page=" + currentPage);
+            shuffleArray(res.data);
             setBlogs((prevPosts) => [...prevPosts, ...res.data]);
             setLoading(false);
         };
         fetchPost();
     }, [currentUser._id, currentPage]);
-    console.log(blogs);
+
     const fetchMoreData = () => {
         if (blogs.length < 18) {
+            console.log(currentPage);
             setCurrentPage((prevPage) => prevPage + 1);
         } else {
             setHasMore(false);

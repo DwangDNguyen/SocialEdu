@@ -5,7 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "./register.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, user } from "../../redux/axios/axios";
-
+import { useDispatch } from "react-redux";
+import { updateInfo } from "../../redux/reducers/infoRegisterReducer";
 const Register = () => {
     const initialValues = {
         username: "",
@@ -23,7 +24,7 @@ const Register = () => {
 
     const [file, setFile] = useState("");
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     const handleSubmit = async (e) => {
         e.preventDefault();
         setValues(
@@ -62,14 +63,16 @@ const Register = () => {
                 //         navigate("/login");
                 //     }, 5000);
                 // });
-                localStorage.setItem("user", JSON.stringify(values));
-                console.log(values.email);
+                // localStorage.setItem("user", JSON.stringify(values));
+                dispatch(updateInfo(values));
+                console.log(values);
                 await auth.post("/send-otp", { email: values.email });
 
                 navigate("/verify?type=verifyRegister");
             }
         } catch (err) {
             setError(true);
+            console.log(err);
             if (err.response.data.error) {
                 setFormErrors({
                     ...formErrors,
@@ -149,6 +152,13 @@ const Register = () => {
     const onUpload = async (e) => {
         const base64 = await convert(e.target.files[0]);
         setFile(base64);
+        setValues(
+            Object.assign(values, {
+                avatar:
+                    file ||
+                    "https://thumbs.dreamstime.com/b/test-icon-vector-question-mark-female-user-person-profile-avatar-symbol-help-sign-glyph-pictogram-illustration-test-168789128.jpg",
+            })
+        );
     };
     return (
         <div className="register">

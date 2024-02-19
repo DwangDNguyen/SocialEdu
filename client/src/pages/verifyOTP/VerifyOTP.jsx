@@ -6,10 +6,12 @@ import { registerUser } from "../../helper/helper.js";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { auth } from "../../redux/axios/axios";
+import { useSelector } from "react-redux";
 const VerifyOTP = () => {
     const location = useLocation();
+    const infoRegister = useSelector((state) => state.infoRegister.info);
     const type = new URLSearchParams(location.search).get("type");
-    console.log(type);
+    console.log(infoRegister);
     const [otp, setOtp] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -64,8 +66,14 @@ const VerifyOTP = () => {
                     password: password,
                 });
                 localStorage.removeItem("email");
-                toast.success("Password changed successfully");
-                navigate("/login");
+                toast.success("Password changed successfully", {
+                    autoClose: 3000,
+                    onClose: () => {
+                        navigate("/login");
+                    },
+                    theme: "dark",
+                });
+                // navigate("/login");
             }
         } catch (e) {}
     };
@@ -73,8 +81,16 @@ const VerifyOTP = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            const values = JSON.parse(localStorage.getItem("user"));
-
+            // const values = JSON.parse(localStorage.getItem("user"));
+            const values = {
+                username: infoRegister.username,
+                email: infoRegister.email,
+                phone: infoRegister.phone,
+                password: infoRegister.password,
+                confirmPassword: infoRegister.confirmPassword,
+                avatar: infoRegister.avatar,
+            };
+            console.log(values);
             let customPromise = registerUser({ ...values, otp });
             console.log({ ...values, otp });
             toast.promise(customPromise, {

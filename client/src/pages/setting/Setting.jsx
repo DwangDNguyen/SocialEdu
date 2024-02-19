@@ -18,6 +18,7 @@ const Setting = () => {
     const currentUser = useSelector((state) => state.user.user);
     const idPerson = useLocation().pathname.split("/")[2];
     const [person, setPerson] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const { t } = useTranslation("setting");
     const dispatch = useDispatch();
     const initialValues = {
@@ -145,6 +146,7 @@ const Setting = () => {
         // setFormErrors(validate(values));
         // console.log(values);
         try {
+            setIsLoading(true);
             user.put(`/${idPerson}`, {
                 username: values.username,
                 email: values.email,
@@ -155,6 +157,7 @@ const Setting = () => {
                 if (currentUser._id === idPerson) {
                     dispatch(updateSuccess(res.data));
                 }
+                setIsLoading(false);
                 // dispatch(updateSuccess(res.data));
             });
         } catch (err) {
@@ -326,7 +329,7 @@ const Setting = () => {
                             </div> */}
                         <div className="setting-submit">
                             <button className="submit-change">
-                                {t("setting.Submit")}
+                                {isLoading ? "Loading..." : t("setting.Submit")}
                             </button>
                         </div>
                     </form>

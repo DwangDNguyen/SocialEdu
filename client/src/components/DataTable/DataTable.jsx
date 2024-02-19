@@ -63,10 +63,13 @@ const DataTable = ({ type }) => {
         };
         getData();
     }, []);
-
-    const deleteItem = async (id) => {
+    const deleteItem = async (id, username) => {
         if (type === "user") {
-            await user.delete(`/delete/${id}`);
+            await user.delete(`/delete/${id}`, {
+                data: {
+                    username: username,
+                },
+            });
             toast.success("User Deleted Successfully!!", {
                 autoClose: 4500,
                 onClose: () => {
@@ -306,7 +309,8 @@ const DataTable = ({ type }) => {
                                                                     className="deleteButton"
                                                                     onClick={() =>
                                                                         deleteItem(
-                                                                            row._id
+                                                                            row._id,
+                                                                            row.username
                                                                         )
                                                                     }
                                                                 >

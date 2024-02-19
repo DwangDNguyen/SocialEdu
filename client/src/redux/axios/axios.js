@@ -411,16 +411,16 @@ post.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-export const notification = axios.create({
-    baseURL: "http://localhost:5000/api/notification",
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
+// export const notification = axios.create({
+//     baseURL: "http://localhost:5000/api/notification",
+//     headers: {
+//         "Content-Type": "application/json",
+//     },
+// });
 
-export const chatbot = axios.create({
-    baseURL: "http://localhost:5000/api/chatbot",
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
+// export const chatbot = axios.create({
+//     baseURL: "http://localhost:5000/api/chatbot",
+//     headers: {
+//         "Content-Type": "application/json",
+//     },
+// });
